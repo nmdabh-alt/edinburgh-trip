@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2a2440">
+<title>Edinburgh, 10 to 18 December 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef0f4; --surface:#ffffff; --ink:#1b2230; --muted:#586272; --line:#d6dbe4;
+  --accent:#5b3a73; --accent-ink:#ffffff; --amber:#935606; --chip:#e1e5ec;
+  --dusk1:#2a2440; --dusk2:#5b3a73; --dusk3:#d98f4e;
+  --serif:"Young Serif", Georgia, "Times New Roman", serif;
+  --sans:"Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#12161e; --surface:#1b212c; --ink:#e9edf3; --muted:#a2adbc; --line:#2d3646;
+    --accent:#cfa9e3; --accent-ink:#1a1022; --amber:#e3a95d; --chip:#252d3b;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:72px; -webkit-text-size-adjust:100%}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:17px; line-height:1.55;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:6px}
+
+.hero{position:relative; color:#fff; padding:calc(env(safe-area-inset-top,0px) + 36px) 20px 0;
+  background:linear-gradient(180deg,var(--dusk1) 0%,var(--dusk2) 62%,var(--dusk3) 100%); overflow:hidden}
+.hero h1{font-family:var(--serif); font-weight:400; font-size:clamp(2.6rem,11vw,4.4rem); line-height:1; margin:0 0 10px}
+.hero p{margin:0; max-width:34ch; font-size:1.02rem; color:#f1e9f6}
+.hero svg{display:block; width:calc(100% + 40px); margin:26px -20px 0; height:auto}
+.wrap{max-width:760px; margin:0 auto; padding:0 16px}
+
+nav{position:sticky; top:0; z-index:20; background:var(--bg); border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top,0px)}
+nav ul{list-style:none; margin:0 auto; padding:10px 16px; display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; max-width:760px}
+nav ul::-webkit-scrollbar{display:none}
+nav a{display:block; white-space:nowrap; text-decoration:none; background:var(--chip); color:var(--ink);
+  padding:7px 13px; border-radius:999px; font-size:.92rem; font-weight:500}
+nav a.on{background:var(--accent); color:var(--accent-ink)}
+nav li.gap{margin-left:10px; padding-left:10px; border-left:1px solid var(--line)}
+
+section.day{padding:34px 0 6px}
+.day h2{font-family:var(--serif); font-weight:400; font-size:1.7rem; line-height:1.15; margin:0 0 6px}
+.day h3.sub{font-family:var(--serif); font-weight:400; font-size:1.2rem; margin:26px 0 12px; color:var(--amber)}
+.day .when{color:var(--amber); font-weight:600; font-size:.95rem; margin:0 0 6px}
+.day .note{color:var(--muted); margin:0 0 18px}
+
+.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin:0 0 18px}
+.photos{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; background:var(--chip); scrollbar-width:none}
+.photos::-webkit-scrollbar{display:none}
+.photos figure{margin:0; flex:0 0 100%; scroll-snap-align:start; position:relative; aspect-ratio:16/10}
+.photos img{width:100%; height:100%; object-fit:cover; display:block}
+.photos .ph{display:flex; align-items:center; justify-content:center; height:100%; color:var(--muted); font-size:.92rem; padding:16px; text-align:center}
+.credit{font-size:.78rem; color:var(--muted); padding:6px 16px 0}
+.credit a{color:var(--muted)}
+.body{padding:14px 16px 16px}
+.body h3{font-family:var(--serif); font-weight:400; font-size:1.3rem; margin:0 0 6px; line-height:1.2}
+.body p{margin:0 0 10px}
+.tip{color:var(--muted); font-size:.95rem}
+.badge{display:inline-block; font-size:.82rem; font-weight:600; padding:3px 10px; border-radius:999px; border:1px solid var(--amber); color:var(--amber); margin:0 0 10px}
+.actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.btn{display:inline-block; text-decoration:none; font-weight:600; font-size:.95rem; padding:10px 15px; border-radius:10px;
+  background:var(--accent); color:var(--accent-ink); min-height:44px}
+.btn.alt{background:transparent; color:var(--ink); border:1px solid var(--line)}
+
+.empty{border:1.5px dashed var(--line); border-radius:14px; padding:18px 16px; color:var(--muted); margin:0 0 18px}
+.halal{background:var(--surface); border-left:4px solid var(--amber); border-radius:8px; padding:12px 14px; margin:0 0 18px; font-size:.95rem}
+
+.todo{list-style:none; padding:0; margin:0 0 30px}
+.todo li{background:var(--surface); border:1px solid var(--line); border-radius:12px; margin:0 0 8px}
+.todo label{display:flex; gap:12px; align-items:flex-start; padding:12px 14px; min-height:48px; cursor:pointer}
+.todo input{width:22px; height:22px; margin-top:2px; accent-color:var(--accent); flex:none}
+.todo input:checked + span{text-decoration:line-through; color:var(--muted)}
+footer{padding:20px 16px 40px; text-align:center; color:var(--muted); font-size:.85rem}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Edinburgh</h1>
+  <p>10 to 18 December 2026. Family trip for four, with halal food at the centre of every meal plan.</p>
+  <svg viewBox="0 0 800 130" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="#1b1830" d="M0 130 V92 L60 86 L120 90 L180 78 L230 70 L250 52 L262 52 L268 38 L274 52 L290 52 L296 66 L330 60 L336 46 L340 30 L344 46 L350 60 L400 56 L440 62 L470 50 L474 34 L478 20 L482 34 L486 50 L520 58 L560 54 L566 40 L572 54 L610 64 L660 72 L720 66 L800 78 V130 Z"/>
+    <path fill="var(--bg)" d="M0 130 V112 L120 108 L240 114 L400 106 L560 114 L700 108 L800 112 V130 Z"/>
+  </svg>
+</header>
+
+<nav aria-label="Trip sections"><ul id="nav"></ul></nav>
+
+<main class="wrap" id="main">
+  <noscript><p class="empty">This page needs JavaScript to show the itinerary.</p></noscript>
+</main>
+
+<footer>Photos load from Wikipedia and Wikimedia Commons. Opening hours, prices, bookings and halal status change, so confirm with each venue before you go.</footer>
+
+<script>
+/* ==================================================================
+   EDIT HERE. Everything on the page is built from these lists.
+   place: { name, wiki (Wikipedia title for photos), q (Google Maps search),
+            url (optional exact Google Maps link), text, tip }
+   food:  { name, where, status, note, q, src (link to halal info) }
+================================================================== */
+const DAYS = [
+  { id:"d10", chip:"Thu 10", date:"Thursday 10 December", title:"Arrival and the Royal Mile",
+    note:"Keep it light after travelling. Settle in, then an easy evening walk.",
+    places:[
+      { name:"The Royal Mile", wiki:"Royal_Mile", q:"Royal Mile Edinburgh",
+        text:"The long, cobbled spine of the Old Town, running from the castle down to Holyrood. Shops, closes (narrow alleys), street performers and plenty of places to warm up.",
+        tip:"Look down the closes on either side. Many open onto small courtyards and stairways." },
+      { name:"Princes Street Gardens and Christmas market", wiki:"Princes_Street_Gardens", q:"Princes Street Gardens Edinburgh",
+        text:"The sunken park below the castle. In December it typically hosts the Christmas market and funfair, with the castle lit above. A good first-night wander for the boys.",
+        tip:"Market dates and ride prices vary by year. Check the official site before you go." }
+    ]},
+  { id:"d11", chip:"Fri 11", date:"Friday 11 December", title:"Day trip to Glasgow by bus",
+    note:"Roughly 1 to 1.5 hours each way. Mostly indoors, so the weather matters little. A halal lunch option in Glasgow is in the Lunch section.",
+    places:[
+      { name:"Kelvingrove Art Gallery and Museum", wiki:"Kelvingrove_Art_Gallery_and_Museum", q:"Kelvingrove Art Gallery and Museum Glasgow",
+        text:"A grand red sandstone museum with art, natural history, armour and a Spitfire hanging from the ceiling. Something for every age, and usually free to enter.",
+        tip:"Allow two to three hours. Take the Spitfire hall first, then pick galleries." },
+      { name:"Riverside Museum", wiki:"Riverside_Museum", q:"Riverside Museum Glasgow",
+        text:"Glasgow's transport museum on the Clyde: vintage cars, trams, bikes, trains and a recreated old street. Hands-on and a hit with teenagers.",
+        tip:"The tall ship Glenlee is moored just outside." },
+      { name:"Buchanan Street", wiki:"Buchanan_Street", q:"Buchanan Street Glasgow",
+        text:"Glasgow's main pedestrian shopping street, with big brands, street music and the nearby Style Mile. Good for the shopping part of the day.",
+        tip:"Done by mid-afternoon? Head back before the evening rush at the bus station." }
+    ]},
+  { id:"d12", chip:"Sat 12", date:"Saturday 12 December", title:"Alpine coaster",
+    note:"Weather-sensitive: coasters can close for wind, ice or heavy rain. Forecast check set for 5 December, with an indoor swap day ready.",
+    places:[
+      { name:"Alpine Coaster", wiki:"", q:"Alpine Coaster Edinburgh", url:"https://maps.app.goo.gl/q5RHuJV7gtbRu2NW9",
+        text:"The mountain coaster you picked, on the southern edge of Edinburgh below the Pentland Hills. You control your own speed on a track that runs down the hillside.",
+        tip:"Book ahead and check the closure policy for wind and ice. Dress warmly and wear grippy shoes." }
+    ]},
+  { id:"d13", chip:"Sun 13", date:"Sunday 13 December", title:"Old Town highlights",
+    note:"Start at the castle when it opens, then work down the Royal Mile.",
+    places:[
+      { name:"Edinburgh Castle", wiki:"Edinburgh_Castle", q:"Edinburgh Castle",
+        text:"The fortress on the volcanic rock that dominates the skyline. See the Crown Jewels of Scotland, the Stone of Destiny, St Margaret's Chapel and the One O'Clock Gun.",
+        tip:"Book tickets online and arrive early. Daylight is short in December." },
+      { name:"St Giles' Cathedral", wiki:"St_Giles'_Cathedral", q:"St Giles' Cathedral Edinburgh",
+        text:"The High Kirk of Edinburgh, known for its crown-shaped spire and the Thistle Chapel. A quiet stop partway down the Royal Mile.",
+        tip:"Check opening times and any visiting guidelines before you go in." },
+      { name:"Camera Obscura and World of Illusions", wiki:"Camera_Obscura_and_World_of_Illusions", q:"Camera Obscura and World of Illusions Edinburgh",
+        text:"Five floors of optical illusions, mirror mazes and a rooftop view. The camera obscura itself projects live views of the city. Fun for the 14-year-old.",
+        tip:"Pairs well with a rooftop look-out over the Old Town." }
+    ]},
+  { id:"d14", chip:"Mon 14", date:"Monday 14 December", title:"Holyrood and Arthur's Seat",
+    note:"Sunset is around 3:30 pm, so do the climb early and the palace after.",
+    places:[
+      { name:"Palace of Holyroodhouse", wiki:"Palace_of_Holyroodhouse", q:"Palace of Holyroodhouse Edinburgh",
+        text:"The King's official residence in Scotland, at the foot of the Royal Mile. Visit the state apartments, Mary Queen of Scots' rooms and the ruined abbey.",
+        tip:"Closed during royal use. Confirm dates before planning around it." },
+      { name:"Arthur's Seat", wiki:"Arthur's_Seat", q:"Arthur's Seat Edinburgh",
+        text:"An ancient volcano in Holyrood Park with a view across the whole city. The main path is steady rather than technical, but it can be windy and slippery.",
+        tip:"Wear grippy shoes and bring layers. Skip it in strong wind or ice." }
+    ]},
+  { id:"d15", chip:"Tue 15", date:"Tuesday 15 December", title:"Museums and science",
+    note:"A good indoor day. Choose the garden or Dynamic Earth depending on the weather.",
+    places:[
+      { name:"National Museum of Scotland", wiki:"National_Museum_of_Scotland", q:"National Museum of Scotland Edinburgh",
+        text:"Scottish history, world cultures, natural history and science under one roof, with Dolly the sheep and a rooftop terrace. Free entry for the main galleries.",
+        tip:"Pick three galleries rather than trying to see everything." },
+      { name:"Royal Botanic Garden Edinburgh", wiki:"Royal_Botanic_Garden_Edinburgh", q:"Royal Botanic Garden Edinburgh",
+        text:"Seventy acres of gardens with a huge glasshouse complex, good for a mild-weather stroll or a warm indoor wander. A winter light trail is sometimes held in December.",
+        tip:"Check whether the evening light trail is running this year." },
+      { name:"Dynamic Earth", wiki:"Dynamic_Earth", q:"Dynamic Earth Edinburgh",
+        text:"A science centre about the planet's history, from volcanoes to ice ages. It sits next to Holyrood and suits both sons.",
+        tip:"Good wet-weather alternative to the garden." }
+    ]},
+  { id:"d16", chip:"Wed 16", date:"Wednesday 16 December", title:"Day trip: pick one",
+    note:"Decide between a coastal town and a castle city. Both take roughly 1.5 to 2 hours each way.",
+    places:[
+      { name:"St Andrews", wiki:"St_Andrews", q:"St Andrews Fife",
+        text:"A coastal university town with a ruined cathedral, castle, a long beach and the Old Course. Pleasant for walking even in cold weather.",
+        tip:"Short daylight means leaving early." },
+      { name:"Stirling Castle", wiki:"Stirling_Castle", q:"Stirling Castle",
+        text:"A hilltop castle with restored royal apartments and sweeping views, close to the Wallace Monument and Bannockburn. Easier by train than St Andrews.",
+        tip:"Good if you want more history and less walking." }
+    ]},
+  { id:"d17", chip:"Thu 17", date:"Thursday 17 December", title:"Shopping and farewell dinner",
+    note:"A relaxed last full day. Plan the farewell dinner from the Dinner section.",
+    places:[
+      { name:"Princes Street", wiki:"Princes_Street", q:"Princes Street Edinburgh",
+        text:"The main shopping street, facing the castle across the gardens. High-street brands and department stores, and the Christmas lights are at their best in the evening.",
+        tip:"Stores can be busy near Christmas. Go in the morning." },
+      { name:"Dean Village", wiki:"Dean_Village", q:"Dean Village Edinburgh",
+        text:"A quiet old milling hamlet on the Water of Leith, a few minutes from the city centre. Stone buildings and a riverside walk, good for photos.",
+        tip:"Combine it with the walk along the Water of Leith." }
+    ]},
+  { id:"d18", chip:"Fri 18", date:"Friday 18 December", title:"Departure",
+    note:"Pack, check out and travel home.", places:[] }
+];
+
+/* status labels used below:
+   "Fully halal" = venue says or is listed as 100% halal
+   "Halal meat" = meat is halal, other things (like alcohol) may be served
+   "Halal options" = only some items are halal. Always ask. */
+const Z = "https://www.zabihah.com/restaurants/";
+const GUIDE = "https://unifresher.co.uk/cities/edinburgh/best-halal-restaurants-in-edinburgh/";
+const ETF = "https://www.etfoodvoyage.com/?p=36434";
+const OT = "https://www.opentable.co.uk/cuisine/best-halal-restaurants-edinburgh-midlothian-edinburgh";
+
+const FOOD = {
+  breakfast:[
+    { name:"Flatbread Turkish Bakery House", where:"Haymarket Terrace", status:"Fully halal",
+      note:"Halal Turkish bakery and cafe. A full Turkish breakfast (menemen, borek, simit) is listed daily from 8 am, and weekend breakfast runs until about 2:30 pm. Good for a family sharing board.",
+      q:"Flatbread Turkish Bakery House Haymarket Terrace Edinburgh", src:"https://edinburgh.org/point-of-interest/flatbread-turkish-bakery-house" },
+    { name:"Laila Lunch and Brunch", where:"63 Cockburn Street, Old Town", status:"Halal meat",
+      note:"Pink Middle Eastern style brunch cafe just off the Royal Mile. All meats are halal, but alcohol is served. Listed open daily from 9 am.",
+      q:"Laila Cockburn Street Edinburgh", src:"https://firsttable.co.uk/edinburgh/edinburgh-old-town/laila" },
+    { name:"Dishoom (breakfast)", where:"3a St Andrew Square", status:"Halal meat",
+      note:"All meats are halal, except the bacon served only at breakfast, so choose the halal sausage or egg dishes. Popular, so expect queues at weekends.",
+      q:"Dishoom Edinburgh St Andrew Square", src:ETF },
+    { name:"Zaza's Coffee House", where:"21 Grassmarket", status:"Check with venue",
+      note:"Small Mediterranean cafe with light breakfasts, panini and pastries near the castle. Listings differ on whether everything is halal, and one review mentions haggis, so ask when you order.",
+      q:"Zaza's Coffee House Grassmarket Edinburgh", src:Z+"ca190108-7767-11ef-95ae-6045bdeb9f57/zazas-coffee-edinburgh-city-of-edinburgh" },
+    { name:"Stack and Still", where:"415-417 St James Square", status:"Halal options",
+      note:"Pancake restaurant where the halal options are clearly marked on the menu. A fun sweet breakfast for the boys.",
+      q:"Stack and Still Edinburgh St James Quarter", src:GUIDE }
+  ],
+  lunch:[
+    { name:"Kebab Mahal", where:"7 Nicolson Square, near the Central Mosque", status:"Fully halal",
+      note:"Long-running halal tandoori and curry spot in the city centre. All food is certified halal, and no alcohol is allowed. Known for kebabs and doner.",
+      q:"Kebab Mahal 7 Nicolson Square Edinburgh", src:Z+"c9dc4a18-7767-11ef-95ae-6045bdeb9f57/kebab-mahal-edinburgh-city-of-edinburgh" },
+    { name:"Deep Sea Fish and Chips", where:"2 Antigua Street", status:"Fully halal",
+      note:"Describes itself as Edinburgh's only 100% halal fish and chip shop. Also does pizza, pasta, doner and pakora. Central and cheap.",
+      q:"Deep Sea Fish and Chips 2 Antigua Street Edinburgh", src:GUIDE },
+    { name:"Nanyang Malaysian Restaurant", where:"6-7 Lister Square, Quartermile", status:"Halal meat",
+      note:"Malaysian and Chinese dim sum. Chicken and beef are halal. Listed open for lunch daily except Monday. Alcohol is served.",
+      q:"Nanyang Malaysian Restaurant Lister Square Edinburgh", src:GUIDE },
+    { name:"Oh My Flatbread", where:"48 Haymarket Terrace", status:"Check with venue",
+      note:"Turkish flatbreads and Turkish calzone. Appears in halal restaurant guides, so confirm the meat and drinks policy when you book.",
+      q:"Oh My Flatbread Haymarket Terrace Edinburgh", src:GUIDE },
+    { name:"Rodi", where:"121 Morrison Street", status:"Check with venue",
+      note:"Turkish and Mediterranean barbecue with vegetarian options. Appears in halal restaurant guides. Confirm before you go.",
+      q:"Rodi 121 Morrison Street Edinburgh", src:GUIDE },
+    { name:"Bread Meats Bread", where:"Lothian Road, North Bridge and Fort Kinnaird", status:"Halal options",
+      note:"Burger chain with halal chicken dishes and sandwiches only. The beef is not halal, so order chicken.",
+      q:"Bread Meats Bread Edinburgh", src:GUIDE },
+    { name:"Wingstop", where:"Edinburgh", status:"Halal options",
+      note:"Chicken is listed as halal. Quick stop for the boys between sights.",
+      q:"Wingstop Edinburgh", src:ETF },
+    { name:"Namaste by Delhi Darbar (Glasgow)", where:"Glasgow, for the 11 December trip", status:"Fully halal",
+      note:"Indian restaurant listed as a halal dining option in Glasgow. A good lunch or early dinner stop on your Glasgow day.",
+      q:"Namaste by Delhi Darbar Glasgow", src:OT }
+  ],
+  dinner:[
+    { name:"Kezban Mediterranean Restaurant", where:"9-10 Commercial Street, Leith", status:"Halal meat",
+      note:"Family-run Turkish restaurant cooking on a charcoal grill, with handmade mezes. All meat is halal, and gluten-free and vegetarian dishes are available.",
+      q:"Kezban Mediterranean Restaurant Commercial Street Edinburgh", src:GUIDE },
+    { name:"Ada Restaurant", where:"9a Antigua Street", status:"Check with venue",
+      note:"Turkish hot and cold mezes, lamb and seafood. Open from midday. Listed in halal restaurant guides, so confirm with the venue.",
+      q:"Ada Restaurant 9a Antigua Street Edinburgh", src:GUIDE },
+    { name:"Edinburgh Prime Steakhouse", where:"Edinburgh", status:"Fully halal",
+      note:"A halal steakhouse serving prime cuts. A good pick for the farewell dinner. Book ahead.",
+      q:"Edinburgh Prime Steakhouse", src:OT },
+    { name:"Ronaq", where:"Comley Bank, about a mile from the centre", status:"Fully halal",
+      note:"Indian restaurant listed as halal. It is a BYOB venue, so no alcohol is sold on site.",
+      q:"Ronaq Comley Bank Edinburgh", src:OT },
+    { name:"Bonoful", where:"Portobello", status:"Fully halal",
+      note:"Bangladeshi and Indian cooking by the Portobello seafront. Worth the trip if you fancy a beach walk first.",
+      q:"Bonoful Portobello Edinburgh", src:OT },
+    { name:"Knights Kitchen", where:"166 Leith Walk", status:"Halal meat",
+      note:"Kenyan and East African home cooking. Chicken and beef are halal, and halal food is cooked in separate pans from non-halal items, which include pork elsewhere on the menu.",
+      q:"Knights Kitchen 166 Leith Walk Edinburgh", src:GUIDE },
+    { name:"Chaophraya", where:"33 Castle Street", status:"Halal options",
+      note:"Thai restaurant with views of the castle. Only the chicken and duck are halal, and not every dish uses them. Pricey, and a good occasion dinner.",
+      q:"Chaophraya Edinburgh Castle Street", src:ETF },
+    { name:"Dishoom (dinner)", where:"3a St Andrew Square", status:"Halal meat",
+      note:"All meats are halal. Try the lamb Salli Boti. Book ahead for dinner.",
+      q:"Dishoom Edinburgh St Andrew Square", src:ETF },
+    { name:"Solti", where:"10 Drummond Street", status:"Check with venue",
+      note:"Nepali and Himalayan spices with Scottish produce, run by a father and son. Appears in halal restaurant guides. Confirm the meat policy.",
+      q:"Solti Restaurant 10 Drummond Street Edinburgh", src:GUIDE }
+  ],
+  snacks:{
+    drinks:[
+      { name:"Flatbread Turkish Bakery House", where:"Haymarket Terrace", status:"Fully halal",
+        note:"Turkish tea with baklava or fresh coffee. A warm stop near Haymarket station.",
+        q:"Flatbread Turkish Bakery House Haymarket Terrace Edinburgh", src:"https://edinburgh.org/point-of-interest/flatbread-turkish-bakery-house" },
+      { name:"Zaza's Coffee House", where:"21 Grassmarket", status:"Check with venue",
+        note:"Fresh coffee and pastries beside the Grassmarket, a short walk from the castle. Confirm the halal status when you order.",
+        q:"Zaza's Coffee House Grassmarket Edinburgh", src:Z+"ca190108-7767-11ef-95ae-6045bdeb9f57/zazas-coffee-edinburgh-city-of-edinburgh" },
+      { name:"Dishoom (chai stop)", where:"3a St Andrew Square", status:"Halal meat",
+        note:"Known for its chai. All meat is halal, so it works as a drink and snack stop between sights.",
+        q:"Dishoom Edinburgh St Andrew Square", src:ETF }
+    ],
+    icecream:[
+      { name:"Sweet Paradice Desserts", where:"Morningside", status:"Halal options",
+        note:"A pink dessert shop with 25+ Italian ice cream flavours, waffles, crepes, churros, milkshakes and sundaes. A city listing tags it with halal meals, so confirm for specific items.",
+        q:"Sweet Paradice Desserts Morningside Edinburgh", src:"https://edinburgh.org/point-of-interest/sweet-paradice-desserts/" },
+      { name:"Scoopz", where:"27 West Nicolson Street", status:"Fully halal",
+        note:"Dessert parlour near the university with milkshakes, sundaes, crepes, cakes, coffees and hot chocolate. Listed as fully halal, with older reviews, so check it is still open.",
+        q:"Scoopz 27 West Nicolson Street Edinburgh", src:Z+"caeec1ed-7767-11ef-95ae-6045bdeb9f57/scoopz-edinburgh-city-of-edinburgh" },
+      { name:"Heavenly Desserts", where:"134 Dundee Street, Fountain Park", status:"Halal options",
+        note:"Gelato, waffles, crepes, cookie dough, mochi and signature milkshakes. Tagged halal on delivery apps, so confirm before ordering.",
+        q:"Heavenly Desserts 134 Dundee Street Edinburgh", src:"https://www.ubereats.com/gb/store/heavenly-desserts-fountain-park/ZaZW3jTtVZO4SgN0knOzNA/b884be0e-1cf1-529a-8578-8023165d78bf/99d5c715-e9f4-55ef-83e9-266c97cdaecf" }
+    ],
+    cakes:[
+      { name:"Flatbread Turkish Bakery House", where:"Haymarket Terrace", status:"Fully halal",
+        note:"Baklava, borek and sweet pastries made in-house. Baklava with coffee and clotted cream is on their menu.",
+        q:"Flatbread Turkish Bakery House Haymarket Terrace Edinburgh", src:"https://edinburgh.org/point-of-interest/flatbread-turkish-bakery-house" },
+      { name:"Heavenly Desserts (cakes)", where:"134 Dundee Street, Fountain Park", status:"Halal options",
+        note:"Cheesecakes and signature desserts alongside the waffles. Confirm halal status for each item.",
+        q:"Heavenly Desserts 134 Dundee Street Edinburgh", src:"https://www.ubereats.com/gb/store/heavenly-desserts-fountain-park/ZaZW3jTtVZO4SgN0knOzNA/b884be0e-1cf1-529a-8578-8023165d78bf/99d5c715-e9f4-55ef-83e9-266c97cdaecf" }
+    ],
+    sweets:[
+      { name:"Maqbool's international supermarket", where:"Next to the Central Mosque", status:"Check with venue",
+        note:"Large international supermarket with baklava, teas, spices and a halal butcher. Good for sweets and snacks to take back. No dedicated halal candy shop confirmed, so check packs for a halal mark.",
+        q:"Maqbool's Supermarket Edinburgh", src:"https://www.spottedbylocals.com/edinburgh/?p=1290" }
+    ]
+  },
+  reels:{
+    /* Add the places from your Instagram reels under the right city.
+       { name:"", where:"", status:"Check with venue", note:"", q:"Name Edinburgh", src:"" } */
+    edinburgh:[],
+    glasgow:[]
+  }
+};
+
+const TODO = [
+  "Choose halal restaurants for each dinner and book the busy ones",
+  "Book the Alpine coaster and check its weather policy",
+  "Decide St Andrews or Stirling",
+  "Book Edinburgh Castle and Holyrood tickets",
+  "Recheck the forecast on 5 December"
+];
+
+/* ================================================================== */
+const $ = (s, el=document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mapsUrl = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+const imagesUrl = q => "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(q);
+const wikiEnc = t => encodeURIComponent(t).replace(/'/g, "%27");
+const bigger = (u, w) => u.replace(/\/\d+px-/, "/" + w + "px-");
+
+function placeCard(p){
+  const photoBlock = p.wiki
+    ? `<div class="photos" data-wiki="${esc(p.wiki)}"><figure><div class="ph">Loading photos…</div></figure></div><div class="credit"></div>`
+    : `<div class="photos"><figure><div class="ph">Tap “More photos” to see pictures of this place.</div></figure></div>`;
+  return `<article class="card">
+    ${photoBlock}
+    <div class="body">
+      <h3>${esc(p.name)}</h3>
+      <p>${esc(p.text)}</p>
+      ${p.tip ? `<p class="tip">${esc(p.tip)}</p>` : ""}
+      <div class="actions">
+        <a class="btn" href="${esc(p.url || mapsUrl(p.q))}" target="_blank" rel="noopener">Open in Google Maps</a>
+        <a class="btn alt" href="${imagesUrl(p.name + " " + p.q)}" target="_blank" rel="noopener">More photos</a>
+      </div>
+    </div></article>`;
+}
+
+function foodCard(f, city){
+  return `<article class="card"><div class="body">
+    <h3>${esc(f.name)}</h3>
+    ${f.where ? `<p class="tip">${esc(f.where)}</p>` : ""}
+    ${f.status ? `<span class="badge">${esc(f.status)}</span>` : ""}
+    ${f.note ? `<p>${esc(f.note)}</p>` : ""}
+    <div class="actions">
+      <a class="btn" href="${mapsUrl(f.q || (f.name + " " + (typeof city === "string" ? city : "Edinburgh")))}" target="_blank" rel="noopener">Open in Google Maps</a>
+      ${f.src ? `<a class="btn alt" href="${esc(f.src)}" target="_blank" rel="noopener">Halal info</a>` : ""}
+    </div></div></article>`;
+}
+
+const HALAL_NOTE = `<p class="halal">Halal status can change, and “halal options” means only some items. Message or call to confirm before you book.</p>`;
+
+function foodSection(id, title, note, items, extra){
+  return `<section class="day" id="${id}">
+    <h2>${title}</h2>
+    <p class="note">${note}</p>
+    ${id === "breakfast" ? HALAL_NOTE : ""}
+    ${extra || (items.length ? items.map(foodCard).join("") : `<p class="empty">Nothing here yet.</p>`)}
+  </section>`;
+}
+
+function build(){
+  const nav = $("#nav"), main = $("#main");
+  let html = "", chips = "";
+  DAYS.forEach(d => {
+    chips += `<li><a href="#${d.id}">${esc(d.chip)}</a></li>`;
+    html += `<section class="day" id="${d.id}">
+      <p class="when">${esc(d.date)}</p>
+      <h2>${esc(d.title)}</h2>
+      <p class="note">${esc(d.note)}</p>
+      ${d.places.map(placeCard).join("")}
+    </section>`;
+  });
+  const foodChips = [["breakfast","Breakfast"],["lunch","Lunch"],["dinner","Dinner"],["snacks","Snacks"],["reels","My reels"],["todo","To do"]];
+  foodChips.forEach(([id,label],i) => { chips += `<li${i===0?' class="gap"':''}><a href="#${id}">${label}</a></li>`; });
+
+  html += foodSection("breakfast","Breakfast","Start the day with halal-friendly spots, mostly in the Old Town and Haymarket.", FOOD.breakfast);
+  html += foodSection("lunch","Lunch","Quick, central and family-friendly, with one stop for the Glasgow day.", FOOD.lunch);
+  html += foodSection("dinner","Dinner","Sit-down evenings, including picks for the farewell dinner on 17 December.", FOOD.dinner);
+
+  const S = FOOD.snacks;
+  const snackBody =
+    `<h3 class="sub">Drinks and coffee</h3>${S.drinks.map(foodCard).join("")}
+     <h3 class="sub">Ice cream and desserts</h3>${S.icecream.map(foodCard).join("")}
+     <h3 class="sub">Cakes and bakes</h3>${S.cakes.map(foodCard).join("")}
+     <h3 class="sub">Sweets and candy</h3>${S.sweets.map(foodCard).join("")}`;
+  html += foodSection("snacks","Snacks","Warm drinks, sweet stops and treats between the sights.", [], snackBody);
+
+  const R = FOOD.reels;
+  const reelCity = (label, city, items) =>
+    `<h3 class="sub">${label}</h3>` + (items.length ? items.map(f => foodCard(f, city)).join("") : `<p class="empty">No places added yet.</p>`);
+  html += foodSection("reels","My reels","Places from your saved Instagram reels.", [],
+    reelCity("Edinburgh", "Edinburgh", R.edinburgh) + reelCity("Glasgow", "Glasgow", R.glasgow));
+
+  html += `<section class="day" id="todo"><h2>Still to do</h2><ul class="todo" id="todolist"></ul></section>`;
+
+  nav.innerHTML = chips;
+  main.insertAdjacentHTML("beforeend", html);
+  buildTodo();
+  highlightNav();
+  document.querySelectorAll(".photos[data-wiki]").forEach(loadPhotos);
+}
+
+function buildTodo(){
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem("edi-todo") || "{}"); } catch(e){}
+  const ul = $("#todolist");
+  ul.innerHTML = TODO.map((t,i) => `<li><label><input type="checkbox" data-i="${i}" ${saved[i] ? "checked" : ""}><span>${esc(t)}</span></label></li>`).join("");
+  ul.addEventListener("change", e => {
+    if (!e.target.matches("input")) return;
+    saved[e.target.dataset.i] = e.target.checked;
+    try { localStorage.setItem("edi-todo", JSON.stringify(saved)); } catch(err){}
+  });
+}
+
+function highlightNav(){
+  const links = [...document.querySelectorAll("#nav a")];
+  const map = new Map(links.map(a => [a.getAttribute("href").slice(1), a]));
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting){
+        links.forEach(l => l.classList.remove("on"));
+        const a = map.get(en.target.id);
+        if (a){ a.classList.add("on"); a.scrollIntoView({inline:"center", block:"nearest"}); }
+      }
+    });
+  }, {rootMargin:"-30% 0px -60% 0px"});
+  document.querySelectorAll("section.day").forEach(s => io.observe(s));
+}
+
+/* ---------- Photos ----------
+   Loaded live from Wikipedia. Two routes are tried, with a timeout, and a
+   short reason is shown on the card if both fail. */
+async function getJSON(url, ms){
+  const c = new AbortController(), t = setTimeout(() => c.abort(), ms || 9000);
+  try {
+    const r = await fetch(url, {signal:c.signal});
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return await r.json();
+  } finally { clearTimeout(t); }
+}
+
+async function loadPhotos(el){
+  const title = el.dataset.wiki;
+  const name = el.closest(".card").querySelector("h3").textContent;
+  const credit = el.nextElementSibling;
+  const imgs = [], errs = [];
+  let pageUrl = "https://en.wikipedia.org/wiki/" + wikiEnc(title);
+
+  try {
+    const d = await getJSON("https://en.wikipedia.org/api/rest_v1/page/summary/" + wikiEnc(title));
+    if (d.thumbnail) imgs.push(bigger(d.thumbnail.source, 960));
+    if (d.content_urls && d.content_urls.desktop) pageUrl = d.content_urls.desktop.page;
+  } catch(e){ errs.push("summary: " + e.message); }
+
+  if (!imgs.length){
+    try {
+      const d = await getJSON("https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&piprop=thumbnail&pithumbsize=960&redirects=1&format=json&origin=*&titles=" + wikiEnc(title.replace(/_/g," ")));
+      const pages = d.query && d.query.pages ? Object.values(d.query.pages) : [];
+      if (pages[0] && pages[0].thumbnail) imgs.push(pages[0].thumbnail.source);
+    } catch(e){ errs.push("api: " + e.message); }
+  }
+
+  try {
+    const d = await getJSON("https://en.wikipedia.org/api/rest_v1/page/media-list/" + wikiEnc(title));
+    for (const it of (d.items || [])){
+      if (imgs.length >= 3) break;
+      if (it.type !== "image" || !it.srcset || !it.srcset.length) continue;
+      if (!/\.jpe?g$/i.test(it.title || "")) continue;
+      let src = it.srcset[0].src; if (src.startsWith("//")) src = "https:" + src;
+      src = bigger(src, 500);
+      const base = u => u.split("/").slice(-1)[0].replace(/^\d+px-/, "");
+      if (!imgs.some(u => base(u) === base(src))) imgs.push(src);
+    }
+  } catch(e){ errs.push("media: " + e.message); }
+
+  if (!imgs.length){
+    el.innerHTML = `<figure><div class="ph">Photos could not load here (${esc(errs[0] || "no image found")}). Tap “More photos”, or open this page in your normal browser.</div></figure>`;
+    return;
+  }
+  el.innerHTML = imgs.map(u => `<figure><img src="${esc(u)}" alt="${esc(name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('figure').remove()"></figure>`).join("");
+  credit.innerHTML = `Photos from <a href="${esc(pageUrl)}" target="_blank" rel="noopener">Wikipedia</a>. Swipe for more.`;
+}
+
+build();
+</script>
+</body>
+</html>
