@@ -57,6 +57,8 @@ section.day{padding:34px 0 6px}
 .photos figure{margin:0; flex:0 0 100%; scroll-snap-align:start; position:relative; aspect-ratio:16/10}
 .photos img{width:100%; height:100%; object-fit:cover; display:block}
 .photos .ph{display:flex; align-items:center; justify-content:center; height:100%; color:var(--muted); font-size:.92rem; padding:16px; text-align:center}
+.photos.pending{display:none}
+.credit:empty{display:none}
 .credit{font-size:.78rem; color:var(--muted); padding:6px 16px 0}
 .credit a{color:var(--muted)}
 .body{padding:14px 16px 16px}
@@ -407,7 +409,7 @@ const bigger = (u, w) => u.replace(/\/\d+px-/, "/" + w + "px-");
 function placeCard(p){
   const photoBlock = p.wiki
     ? `<div class="photos" data-wiki="${esc(p.wiki)}"><figure><div class="ph">Loading photos…</div></figure></div><div class="credit"></div>`
-    : `<div class="photos"><figure><div class="ph">Tap “More photos” to see pictures of this place.</div></figure></div>`;
+    : `<div class="photos" data-search="${esc(p.name + " Edinburgh")}" data-name="${esc(p.name)}"><figure><div class="ph">Loading photos…</div></figure></div><div class="credit"></div>`;
   return `<article class="card">
     ${photoBlock}
     <div class="body">
@@ -422,13 +424,17 @@ function placeCard(p){
 }
 
 function foodCard(f, city){
-  return `<article class="card"><div class="body">
+  const c = typeof city === "string" ? city : "Edinburgh";
+  return `<article class="card">
+    <div class="photos pending" data-search="${esc(f.name.replace(/\s*\(.*?\)/g, "") + " " + c)}" data-name="${esc(f.name)}"></div><div class="credit"></div>
+    <div class="body">
     <h3>${esc(f.name)}</h3>
     ${f.where ? `<p class="tip">${esc(f.where)}</p>` : ""}
     ${f.status ? `<span class="badge">${esc(f.status)}</span>` : ""}
     ${f.note ? `<p>${esc(f.note)}</p>` : ""}
     <div class="actions">
       <a class="btn" href="${mapsUrl(f.q || (f.name + " " + (typeof city === "string" ? city : "Edinburgh")))}" target="_blank" rel="noopener">Open in Google Maps</a>
+      <a class="btn alt" href="${imagesUrl(f.name + " " + c)}" target="_blank" rel="noopener">Photos</a>
       ${f.src ? `<a class="btn alt" href="${esc(f.src)}" target="_blank" rel="noopener">Halal info</a>` : ""}
     </div></div></article>`;
 }
@@ -521,7 +527,7 @@ function watchPhotos(){
       loadPhotos(en.target);
     });
   }, {rootMargin:"600px 0px"});
-  document.querySelectorAll(".photos[data-wiki]").forEach(el => io.observe(el));
+  document.querySelectorAll(".photos[data-wiki], .photos[data-search]").forEach(el => io.observe(el));
 }
 
 /* ---------- Photos ----------
@@ -536,7 +542,44 @@ async function getJSON(url, ms){
   } finally { clearTimeout(t); }
 }
 
+/* Venues without a Wikipedia page: search Wikimedia Commons and keep only files
+   whose title contains every word of the venue name, so we never show a wrong place. */
+const commonsCache = new Map();
+function commonsPhotos(term, name){
+  const key = term.toLowerCase();
+  if (!commonsCache.has(key)) commonsCache.set(key, (async () => {
+    const norm = t => t.toLowerCase().replace(/\.[a-z]+$/, "").replace(/[^a-z0-9]+/g, " ").trim();
+    /* the term is "venue name + city", so the city must be in the file title too */
+    const words = norm(name.replace(/\(.*?\)/g, "") + " " + term.split(" ").pop()).split(" ").filter(Boolean);
+    const d = await getJSON("https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch=" +
+      encodeURIComponent(term) + "&prop=imageinfo&iiprop=url&iiurlwidth=960&format=json&origin=*");
+    const pages = d.query && d.query.pages ? Object.values(d.query.pages) : [];
+    return pages.filter(pg => {
+      const ii = pg.imageinfo && pg.imageinfo[0];
+      if (!ii || !/\.jpe?g$/i.test(pg.title)) return false;
+      const t = " " + norm(pg.title.replace(/^File:/, "")) + " ";
+      return words.every(w => t.includes(" " + w + " "));
+    }).slice(0, 3).map(pg => ({src: pg.imageinfo[0].thumburl || pg.imageinfo[0].url, page: pg.imageinfo[0].descriptionurl}));
+  })());
+  return commonsCache.get(key);
+}
+
+async function loadCommons(el){
+  const credit = el.nextElementSibling;
+  let found = [];
+  try { found = await commonsPhotos(el.dataset.search, el.dataset.name); } catch(e){}
+  if (!found.length){
+    if (el.classList.contains("pending")){ el.remove(); credit.remove(); }
+    else { el.innerHTML = `<figure><div class="ph">No photo found here. Tap “More photos” to see pictures of this place.</div></figure>`; }
+    return;
+  }
+  el.classList.remove("pending");
+  el.innerHTML = found.map(f => `<figure><img src="${esc(f.src)}" alt="${esc(el.dataset.name)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').remove()"></figure>`).join("");
+  credit.innerHTML = `Photos from <a href="${esc(found[0].page)}" target="_blank" rel="noopener">Wikimedia Commons</a>.${found.length > 1 ? " Swipe for more." : ""}`;
+}
+
 async function loadPhotos(el){
+  if (!el.dataset.wiki) return loadCommons(el);
   const title = el.dataset.wiki;
   const name = el.closest(".card").querySelector("h3").textContent;
   const credit = el.nextElementSibling;
