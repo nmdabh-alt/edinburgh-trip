@@ -57,8 +57,10 @@ section.day{padding:34px 0 6px}
 .photos figure{margin:0; flex:0 0 100%; scroll-snap-align:start; position:relative; aspect-ratio:16/10}
 .photos img{width:100%; height:100%; object-fit:cover; display:block}
 .photos .ph{display:flex; align-items:center; justify-content:center; height:100%; color:var(--muted); font-size:.92rem; padding:16px; text-align:center}
-.photos.pending{display:none}
+.photos.pending{height:0}
 .credit:empty{display:none}
+.halalline{font-size:.95rem; color:var(--muted)}
+.halalline strong{color:var(--ink)}
 .credit{font-size:.78rem; color:var(--muted); padding:6px 16px 0}
 .credit a{color:var(--muted)}
 .body{padding:14px 16px 16px}
@@ -144,7 +146,7 @@ const DAYS = [
       { name:"St Giles' Cathedral", wiki:"St_Giles'_Cathedral", q:"St Giles' Cathedral Edinburgh",
         text:"The High Kirk of Edinburgh, known for its crown-shaped spire and the Thistle Chapel. A quiet stop partway down the Royal Mile.",
         tip:"Check opening times and any visiting guidelines before you go in." },
-      { name:"Camera Obscura and World of Illusions", wiki:"Camera_Obscura_and_World_of_Illusions", q:"Camera Obscura and World of Illusions Edinburgh",
+      { name:"Camera Obscura and World of Illusions", wiki:"Camera_Obscura,_Edinburgh", q:"Camera Obscura and World of Illusions Edinburgh",
         text:"Five floors of optical illusions, mirror mazes and a rooftop view. The camera obscura itself projects live views of the city. Fun for the 14-year-old.",
         tip:"Pairs well with a rooftop look-out over the Old Town." }
     ]},
@@ -167,7 +169,7 @@ const DAYS = [
       { name:"Royal Botanic Garden Edinburgh", wiki:"Royal_Botanic_Garden_Edinburgh", q:"Royal Botanic Garden Edinburgh",
         text:"Seventy acres of gardens with a huge glasshouse complex, good for a mild-weather stroll or a warm indoor wander. A winter light trail is sometimes held in December.",
         tip:"Check whether the evening light trail is running this year." },
-      { name:"Dynamic Earth", wiki:"Dynamic_Earth", q:"Dynamic Earth Edinburgh",
+      { name:"Dynamic Earth", wiki:"Dynamic_Earth_(Edinburgh)", q:"Dynamic Earth Edinburgh",
         text:"A science centre about the planet's history, from volcanoes to ice ages. It sits next to Holyrood and suits both sons.",
         tip:"Good wet-weather alternative to the garden." }
     ]},
@@ -423,19 +425,47 @@ function placeCard(p){
     </div></article>`;
 }
 
+/* Plain-language meaning of each status, so the card explains itself without a link. */
+const STATUS_MEANING = {
+  "Fully halal":"Listed as fully halal, with nothing non-halal on the menu.",
+  "Halal meat":"The meat is halal, but other things such as alcohol may be served.",
+  "Halal chicken":"Only the chicken is listed as halal. Check anything else.",
+  "Halal options":"Only some menu items are halal. Ask which ones before ordering.",
+  "Halal on request":"Halal meat can be prepared if you ask when you order.",
+  "Halal suppliers":"Says it uses certified halal suppliers. Ask about specific dishes.",
+  "Halal (sources differ)":"Listings disagree, so ask about each item.",
+  "Check with venue":"No firm halal information found. Ask the venue before you go."
+};
+const SOURCE_NAMES = {
+  "zabihah.com":"Zabihah", "unifresher.co.uk":"the UniFresher halal guide", "etfoodvoyage.com":"ET Food Voyage",
+  "opentable.co.uk":"OpenTable", "opentable.com":"OpenTable", "edinburgh.org":"Edinburgh.org", "ubereats.com":"Uber Eats",
+  "list.co.uk":"The List", "visitglasgow.com":"Visit Glasgow", "designmynight.com":"DesignMyNight", "timeout.com":"Time Out",
+  "spottedbylocals.com":"Spotted by Locals", "inkl.com":"inkl", "bite-magazine.com":"Bite magazine",
+  "trulyexperiencesblog.com":"Truly Experiences blog", "firsttable.co.uk":"First Table", "scotsman.com":"The Scotsman",
+  "deliveroo.co.uk":"Deliveroo"
+};
+function halalLine(f){
+  if (!f.status) return "";
+  let host = "";
+  try { host = new URL(f.src).hostname.replace(/^(www|app)\./, ""); } catch(e){}
+  const key = Object.keys(SOURCE_NAMES).find(k => host === k || host.endsWith("." + k));
+  return `<p class="halalline"><strong>Halal:</strong> ${esc(STATUS_MEANING[f.status] || "")}${key ? " Source: " + esc(SOURCE_NAMES[key]) + "." : ""}</p>`;
+}
+
 function foodCard(f, city){
   const c = typeof city === "string" ? city : "Edinburgh";
+  const base = f.name.replace(/\s*\(.*?\)/g, "");
   return `<article class="card">
-    <div class="photos pending" data-search="${esc(f.name.replace(/\s*\(.*?\)/g, "") + " " + c)}" data-name="${esc(f.name)}"></div><div class="credit"></div>
+    <div class="photos pending" ${f.wiki ? `data-wiki="${esc(f.wiki)}"` : `data-search="${esc(base + " " + c)}"`} data-name="${esc(f.name)}"></div><div class="credit"></div>
     <div class="body">
     <h3>${esc(f.name)}</h3>
     ${f.where ? `<p class="tip">${esc(f.where)}</p>` : ""}
     ${f.status ? `<span class="badge">${esc(f.status)}</span>` : ""}
     ${f.note ? `<p>${esc(f.note)}</p>` : ""}
+    ${halalLine(f)}
     <div class="actions">
       <a class="btn" href="${mapsUrl(f.q || (f.name + " " + (typeof city === "string" ? city : "Edinburgh")))}" target="_blank" rel="noopener">Open in Google Maps</a>
       <a class="btn alt" href="${imagesUrl(f.name + " " + c)}" target="_blank" rel="noopener">Photos</a>
-      ${f.src ? `<a class="btn alt" href="${esc(f.src)}" target="_blank" rel="noopener">Halal info</a>` : ""}
     </div></div></article>`;
 }
 
@@ -545,9 +575,12 @@ async function getJSON(url, ms){
 /* Venues without a Wikipedia page: search Wikimedia Commons and keep only files
    whose title contains every word of the venue name, so we never show a wrong place. */
 const commonsCache = new Map();
+let commonsQueue = Promise.resolve();
 function commonsPhotos(term, name){
   const key = term.toLowerCase();
-  if (!commonsCache.has(key)) commonsCache.set(key, (async () => {
+  /* One search at a time with a short gap, so Commons does not rate-limit a page full of cards. */
+  if (!commonsCache.has(key)) commonsCache.set(key, commonsQueue = commonsQueue.catch(() => {}).then(async () => {
+    await new Promise(r => setTimeout(r, 250));
     const norm = t => t.toLowerCase().replace(/\.[a-z]+$/, "").replace(/[^a-z0-9]+/g, " ").trim();
     /* the term is "venue name + city", so the city must be in the file title too */
     const words = norm(name.replace(/\(.*?\)/g, "") + " " + term.split(" ").pop()).split(" ").filter(Boolean);
@@ -560,7 +593,7 @@ function commonsPhotos(term, name){
       const t = " " + norm(pg.title.replace(/^File:/, "")) + " ";
       return words.every(w => t.includes(" " + w + " "));
     }).slice(0, 3).map(pg => ({src: pg.imageinfo[0].thumburl || pg.imageinfo[0].url, page: pg.imageinfo[0].descriptionurl}));
-  })());
+  }));
   return commonsCache.get(key);
 }
 
@@ -613,10 +646,12 @@ async function loadPhotos(el){
     }
   } catch(e){ errs.push("media: " + e.message); }
 
+  if (!imgs.length && el.classList.contains("pending")){ el.remove(); credit.remove(); return; }
   if (!imgs.length){
     el.innerHTML = `<figure><div class="ph">Photos could not load here (${esc(errs[0] || "no image found")}). Tap “More photos”, or open this page in your normal browser.</div></figure>`;
     return;
   }
+  el.classList.remove("pending");
   el.innerHTML = imgs.map(u => `<figure><img src="${esc(u)}" alt="${esc(name)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').remove()"></figure>`).join("");
   credit.innerHTML = `Photos from <a href="${esc(pageUrl)}" target="_blank" rel="noopener">Wikipedia</a>. Swipe for more.`;
 }
