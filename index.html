@@ -72,6 +72,10 @@ section.day{padding:34px 0 6px}
 .badge.closed{border-color:var(--bad); color:var(--bad); margin-right:6px}
 .btn{display:inline-block; text-decoration:none; font-weight:600; font-size:.95rem; padding:10px 15px; border-radius:10px;
   background:var(--accent); color:var(--accent-ink); min-height:44px}
+button.btn{border:0; font-family:inherit; cursor:pointer}
+button.btn.alt{border:1px solid var(--line)}
+.steps{margin:0 0 6px; padding-left:22px}
+.steps li{margin:0 0 6px}
 .btn.alt{background:transparent; color:var(--ink); border:1px solid var(--line)}
 
 .empty{border:1.5px dashed var(--line); border-radius:14px; padding:18px 16px; color:var(--muted); margin:0 0 18px}
@@ -202,10 +206,16 @@ const DAYS = [
         tip:"Good wet-weather alternative to the garden." },
       { name:"The Meadows", wiki:"The_Meadows,_Edinburgh", q:"The Meadows Edinburgh",
         text:"A large public park just south of the Old Town, close to the National Museum. Tree-lined paths for an easy walk between stops.",
-        tip:"A good stretch of the legs after the museum." }
+        tip:"A good stretch of the legs after the museum." },
+      { name:"Surgeons' Hall Museum", wiki:"Surgeons'_Hall,_Edinburgh", q:"Surgeons' Hall Museum Edinburgh",
+        text:"A medical museum on Nicolson Street run by the Royal College of Surgeons of Edinburgh, with anatomical and pathology collections and the history of surgery.",
+        tip:"Some displays are graphic. Check opening times and whether it suits the 14-year-old and your younger son." },
+      { name:"Edinburgh Central Mosque", wiki:"Edinburgh_Central_Mosque", q:"Edinburgh Central Mosque",
+        text:"The mosque and Islamic centre on Potterrow, beside the university and a few minutes from the National Museum. Useful for prayers during the museum day. Maqbool's supermarket is next door.",
+        tip:"Check prayer times and any visiting arrangements with the mosque directly." }
     ]},
   { id:"d16", chip:"Wed 16", date:"Wednesday 16 December", title:"Day trip: pick one",
-    note:"Decide between a coastal town and a castle city, each roughly 1.5 to 2 hours away each way. Or stay local with a coast day: the Royal Yacht Britannia, Portobello or Cramond.",
+    note:"Decide between a coastal town and a castle city, each roughly 1.5 to 2 hours away each way. Other options are a nearer castle (Midhope), a coastal reserve (St Abbs Head), or a local coast day at the Royal Yacht Britannia, Portobello or Cramond.",
     places:[
       { name:"St Andrews", wiki:"St_Andrews", q:"St Andrews Fife",
         text:"A coastal university town with a ruined cathedral, castle, a long beach and the Old Course. Pleasant for walking even in cold weather.",
@@ -221,7 +231,13 @@ const DAYS = [
         tip:"Wrap up warmly. It is exposed and breezy in winter." },
       { name:"Cramond Beach and Cramond Island", wiki:"Cramond_Island", q:"Cramond Beach Edinburgh",
         text:"A small village on the Firth of Forth with a beach and a tidal causeway out to Cramond Island. A bracing coastal walk.",
-        tip:"The causeway floods at high tide. Check tide times before crossing and do not go out if unsure." }
+        tip:"The causeway floods at high tide. Check tide times before crossing and do not go out if unsure." },
+      { name:"Midhope Castle", wiki:"Midhope_Castle", q:"Midhope Castle",
+        text:"A ruined 16th-century tower house on the Hopetoun estate near South Queensferry, best known as Lallybroch in Outlander. Roughly half an hour west of the city.",
+        tip:"Check whether visits need a booked time before you plan the day. Easier by car." },
+      { name:"St Abbs Head", wiki:"St_Abb's_Head", q:"St Abbs Head",
+        text:"A National Nature Reserve on the Berwickshire coast with sea cliffs, a lighthouse and coastal walks. Roughly 1.5 hours from Edinburgh by car.",
+        tip:"Much easier by car than public transport. Daylight is short in December, so leave early. The cliff paths are exposed in wind and ice." }
     ]},
   { id:"d17", chip:"Thu 17", date:"Thursday 17 December", title:"Shopping and farewell dinner",
     note:"A relaxed last full day. Plan the farewell dinner from the Dinner section.",
@@ -274,7 +290,10 @@ const FOOD = {
       q:"Zaza's Coffee House Grassmarket Edinburgh", src:Z+"ca190108-7767-11ef-95ae-6045bdeb9f57/zazas-coffee-edinburgh-city-of-edinburgh" },
     { name:"Stack and Still", where:"415-417 St James Square", status:"Halal options",
       note:"Pancake restaurant where one student guide says halal options are marked on the menu. The guide's listing is unclear and the venue's own description doesn't mention halal, so confirm the branch and what is halal. A fun sweet breakfast for the boys.",
-      q:"Stack and Still Edinburgh St James Quarter", src:GUIDE }
+      q:"Stack and Still Edinburgh St James Quarter", src:GUIDE },
+    { name:"Urban Angel Cafe", where:"121 Hanover Street", status:"Check with venue",
+      note:"Brunch cafe a few minutes from Princes Street. No halal information found, so ask about the meat and any bacon or ham before ordering.",
+      q:"Urban Angel Cafe 121 Hanover Street Edinburgh" }
   ],
   lunch:[
     { name:"Kebab Mahal", where:"7 Nicolson Square, near the Central Mosque", status:"Fully halal",
@@ -303,7 +322,13 @@ const FOOD = {
       q:"Edinburgh Street Food Omni Centre Leith Street Edinburgh", src:"https://list.co.uk/eat-drink/edinburgh-street-food-26" },
     { name:"Mac Love", where:"Little King Street, St James Quarter (has moved before)", status:"Check with venue",
       note:"Street-kitchen mac and cheese. Some toppings include black pudding and bacon, and no halal information was found, so ask about a meat-free pot. Check their Instagram for where they are in December.",
-      q:"Mac Love Little King Street Edinburgh", src:"https://www.inkl.com/news/edinburgh-to-host-popular-street-food-pop-up-mac-love-outside-st-james-quarter" }
+      q:"Mac Love Little King Street Edinburgh", src:"https://www.inkl.com/news/edinburgh-to-host-popular-street-food-pop-up-mac-love-outside-st-james-quarter" },
+    { name:"Bertie's Fish & Chips", where:"9 Victoria Street", status:"Check with venue",
+      note:"Fish and chip restaurant on Victoria Street, between the Royal Mile and the Grassmarket. No halal information found, so ask about the frying oil and batter.",
+      q:"Bertie's Proper Fish & Chips 9 Victoria Street Edinburgh" },
+    { name:"Frites", where:"Edinburgh", status:"Check with venue",
+      note:"Google Maps did not return a clear match for this name, so search it on Maps to confirm the location and the menu before you plan around it.",
+      q:"Frites Edinburgh" }
   ],
   dinner:[
     { name:"Tuk Tuk Indian Street Food", where:"1 Leven Street, Tollcross", status:"Fully halal",
@@ -335,7 +360,19 @@ const FOOD = {
       q:"Dishoom Edinburgh St Andrew Square", src:ETF },
     { name:"Solti", where:"10 Drummond Street", status:"Check with venue",
       note:"Nepali and Himalayan spices with Scottish produce, run by a father and son. Appears in halal restaurant guides. Confirm the meat policy.",
-      q:"Solti Restaurant 10 Drummond Street Edinburgh", src:GUIDE }
+      q:"Solti Restaurant 10 Drummond Street Edinburgh", src:GUIDE },
+    { name:"The Witchery", where:"352 Castlehill, by the castle", status:"Check with venue",
+      note:"Famous gothic-style restaurant at the top of the Royal Mile, just below the castle. A special-occasion pick. No halal information found, so phone ahead about the meat.",
+      q:"The Witchery Castlehill Edinburgh" },
+    { name:"Tipo", where:"110 Hanover Street", status:"Check with venue",
+      note:"Italian restaurant on Hanover Street. No halal information found. Ask about the meat, and the pasta and pizza toppings, before booking.",
+      q:"tipo 110 Hanover Street Edinburgh" },
+    { name:"Patina", where:"Edinburgh Park (about 4 miles west of the centre)", status:"Check with venue",
+      note:"Modern European bar and restaurant at Edinburgh Park, out of the centre, so it needs a tram or taxi. No halal information found, so confirm before booking.",
+      q:"Patina Bar and Restaurant Edinburgh Park" },
+    { name:"The Palmerston", where:"1 Palmerston Place, West End", status:"Check with venue",
+      note:"Restaurant in the West End with a menu that changes daily. No halal information found, so ask about the meat when you book.",
+      q:"The Palmerston 1 Palmerston Place Edinburgh" }
   ],
   snacks:{
     drinks:[
@@ -350,7 +387,16 @@ const FOOD = {
         q:"Dishoom Edinburgh St Andrew Square", src:ETF },
       { name:"The Dome", where:"14 George Street", status:"Check with venue",
         note:"The grand listed building on George Street, known for its Christmas decorations (the tree goes up in late October). It is a bar and grill and no halal information was found; phone 0131 624 8624 to ask. Worth a look even if you eat elsewhere.",
-        q:"The Dome 14 George Street Edinburgh", src:"https://www.timeout.com/edinburgh/restaurants/the-dome" }
+        q:"The Dome 14 George Street Edinburgh", src:"https://www.timeout.com/edinburgh/restaurants/the-dome" },
+      { name:"Uplands Roast", where:"Near the University of Edinburgh", status:"Check with venue",
+        note:"Coffee trailer serving specialty coffee and hot chocolate. Check where it is parked before you walk over, and ask about flavourings and syrups.",
+        q:"Uplands Roast Edinburgh" },
+      { name:"L'Etoile Salon de Tea", where:"44 West Port, near the Grassmarket", status:"Check with venue",
+        note:"Cafe and tea room just off the Grassmarket. No halal information found, so check cakes and pastries for gelatine and lard.",
+        q:"L'Etoile Salon de Tea 44 West Port Edinburgh" },
+      { name:"Topping & Co", where:"2 Blenheim Place", status:"Check with venue",
+        note:"Google Maps matched this name to Topping & Company Booksellers of Edinburgh, a bookshop on Blenheim Place. If you meant a different Toppings & Co, tell me and I will swap it.",
+        q:"Topping & Company Booksellers 2 Blenheim Place Edinburgh" }
     ],
     icecream:[
       { name:"Alandas Gelato", where:"1 Forrest Road", status:"Check with venue",
@@ -364,7 +410,13 @@ const FOOD = {
         q:"Scoopz 27 West Nicolson Street Edinburgh", src:Z+"caeec1ed-7767-11ef-95ae-6045bdeb9f57/scoopz-edinburgh-city-of-edinburgh" },
       { name:"Heavenly Desserts", where:"134 Dundee Street, Fountain Park", status:"Halal options",
         note:"Gelato, waffles, crepes, cookie dough, mochi and signature milkshakes. Tagged halal on delivery apps, so confirm before ordering.",
-        q:"Heavenly Desserts 134 Dundee Street Edinburgh", src:"https://www.ubereats.com/gb/store/heavenly-desserts-fountain-park/ZaZW3jTtVZO4SgN0knOzNA/b884be0e-1cf1-529a-8578-8023165d78bf/99d5c715-e9f4-55ef-83e9-266c97cdaecf" }
+        q:"Heavenly Desserts 134 Dundee Street Edinburgh", src:"https://www.ubereats.com/gb/store/heavenly-desserts-fountain-park/ZaZW3jTtVZO4SgN0knOzNA/b884be0e-1cf1-529a-8578-8023165d78bf/99d5c715-e9f4-55ef-83e9-266c97cdaecf" },
+      { name:"Moo Pie Gelato", where:"26 St Mary's Street", status:"Check with venue",
+        note:"Gelato shop near the Royal Mile. No halal information found. Sorbets are the simplest to check.",
+        q:"Moo Pie Gelato 26 St Mary's Street Edinburgh" },
+      { name:"Ciccetta's", where:"26 Bruntsfield Avenue, Bruntsfield", status:"Check with venue",
+        note:"Ice cream shop in Bruntsfield, south of the centre. No halal information found, so ask about ingredients.",
+        q:"Ciccetta's 26 Bruntsfield Avenue Edinburgh" }
     ],
     cakes:[
       { name:"Chulo's Stuffed Cookies", where:"22 Raeburn Place, Stockbridge", status:"Check with venue",
@@ -376,6 +428,9 @@ const FOOD = {
       { name:"Lannan Bakery & Pantry", where:"29-35 Hamilton Place, Stockbridge", status:"Check with venue",
         note:"Bakery in Stockbridge, near Circus Lane and Dean Village. No halal information found, so ask about ingredients such as gelatine and lard before ordering.",
         q:"Lannan Bakery Hamilton Place Edinburgh", src:"http://www.lannanbakery.com/" },
+      { name:"Sugar Daddy's Bakery", where:"8 Roseneath Street, Marchmont", status:"Check with venue",
+        note:"Cake bakery in Marchmont, south of the Meadows, known for gluten-free cakes. No halal information found, so ask about gelatine and alcohol in the cakes.",
+        q:"Sugar Daddy's Bakery Roseneath Street Edinburgh" },
       { name:"Heavenly Desserts (cakes)", where:"134 Dundee Street, Fountain Park", status:"Halal options",
         note:"Cheesecakes and signature desserts alongside the waffles. Confirm halal status for each item.",
         q:"Heavenly Desserts 134 Dundee Street Edinburgh", src:"https://www.ubereats.com/gb/store/heavenly-desserts-fountain-park/ZaZW3jTtVZO4SgN0knOzNA/b884be0e-1cf1-529a-8578-8023165d78bf/99d5c715-e9f4-55ef-83e9-266c97cdaecf" }
@@ -436,7 +491,10 @@ const GLASGOW = {
     drinks:[
       { name:"iCafe", where:"250-254 Woodlands Road, Kelvingrove", status:"Check with venue",
         note:"West End cafe serving cakes, panini, sandwiches and hot drinks, listed on Zabihah. Close to Kelvingrove, so handy before or after the museum. Ask about halal status.",
-        q:"iCafe 250 Woodlands Road Glasgow", src:"https://zabihah.com/restaurants/ca17640d-7767-11ef-95ae-6045bdeb9f57/icaf-kelvingrove-glasgow-city" }
+        q:"iCafe 250 Woodlands Road Glasgow", src:"https://zabihah.com/restaurants/ca17640d-7767-11ef-95ae-6045bdeb9f57/icaf-kelvingrove-glasgow-city" },
+      { name:"The Willow Tea Rooms", where:"97 Buchanan Street", status:"Check with venue",
+        note:"Charles Rennie Mackintosh-designed tea rooms on Buchanan Street, so it fits the shopping part of the Glasgow day. No halal information found, so ask about cakes and savouries.",
+        q:"The Willow Tea Rooms 97 Buchanan Street Glasgow" }
     ],
     icecream:[
       { name:"Deesserts", where:"Sauchiehall Street", status:"Check with venue",
@@ -458,6 +516,19 @@ const GLASGOW = {
 /* Details from Google Maps, keyed by each venue's search text (lower case).
    photo = saved copy in images/food, about = Google's one-line summary, closed = Google's closed flag. */
 const FOOD_INFO = {
+  "urban angel cafe 121 hanover street edinburgh": {"photo":"images/food/urban-angel-cafe-121-hanover-street-edinburgh.jpg","about":"A bright blonde wood bistro emphasising fair trade, organic and locally-sourced ingredients.","address":"121 Hanover St, Edinburgh EH2 1DJ","category":"Brunch restaurant"},
+  "bertie's proper fish & chips 9 victoria street edinburgh": {"photo":"images/food/bertie-s-proper-fish-chips-9-victoria-street-edinb.jpg","about":"Stylish, bi-level stop offering a hearty seafood classics alongside a kids' menu & a full bar.","address":"9 Victoria St, Edinburgh EH1 2HE","category":"Fish & chips restaurant"},
+  "the witchery castlehill edinburgh": {"photo":"images/food/the-witchery-castlehill-edinburgh.jpg","address":"352 Castlehill, Edinburgh EH1 2NF"},
+  "tipo 110 hanover street edinburgh": {"photo":"images/food/tipo-110-hanover-street-edinburgh.jpg","address":"110 Hanover St, Edinburgh EH2 1DR","category":"Italian restaurant"},
+  "patina bar and restaurant edinburgh park": {"photo":"images/food/patina-bar-and-restaurant-edinburgh-park.jpg","address":"3, Airborne Place, New Park Square, Edinburgh Park, Edinburgh EH12 9GR","category":"Modern European restaurant"},
+  "the palmerston 1 palmerston place edinburgh": {"photo":"images/food/the-palmerston-1-palmerston-place-edinburgh.jpg","about":"Classic restaurant with old-fashioned decor & daily-changing menu of area-sourced dishes.","address":"1 Palmerston Pl, Edinburgh EH12 5AF","category":"Restaurant"},
+  "uplands roast edinburgh": {"photo":"images/food/uplands-roast-edinburgh.jpg","about":"Simple coffee trailer specializing in artisan brews, as well as fancy hot chocolate.","address":"University of, Edinburgh EH8 9LD","category":"Coffee shop"},
+  "l'etoile salon de tea 44 west port edinburgh": {"photo":"images/food/l-etoile-salon-de-tea-44-west-port-edinburgh.jpg","address":"44 West Port, Edinburgh EH1 2LD","category":"Cafe"},
+  "topping & company booksellers 2 blenheim place edinburgh": {"photo":"images/food/topping-company-booksellers-2-blenheim-place-edinb.jpg","address":"2 Blenheim Pl, Edinburgh EH7 5JH","category":"Book store"},
+  "moo pie gelato 26 st mary's street edinburgh": {"photo":"images/food/moo-pie-gelato-26-st-mary-s-street-edinburgh.jpg","address":"26 St Mary's St, Edinburgh EH1 1SU","category":"Ice cream shop"},
+  "ciccetta's 26 bruntsfield avenue edinburgh": {"photo":"images/food/ciccetta-s-26-bruntsfield-avenue-edinburgh.jpg","address":"26 Bruntsfield Ave, Bruntsfield EH10 4EW","category":"Ice cream shop"},
+  "sugar daddy's bakery roseneath street edinburgh": {"photo":"images/food/sugar-daddy-s-bakery-roseneath-street-edinburgh.jpg","about":"Colourful venue specializing in gluten-free small & occasion cakes, plus other baked goods.","address":"8 Roseneath St, Marchmont Cres, Edinburgh EH9 1JH","category":"Bakery"},
+  "the willow tea rooms 97 buchanan street glasgow": {"photo":"images/food/the-willow-tea-rooms-97-buchanan-street-glasgow.jpg","about":"Cafe rooms filled with elegant high backed chairs and leaded glass according to Art Nouveau theme.","address":"97 Buchanan St, Glasgow G1 3HF","category":"Tea house"},
   "lannan bakery hamilton place edinburgh": {"photo":"images/food/lannan-bakery-hamilton-place-edinburgh.jpg","address":"29-35 Hamilton Pl, Edinburgh EH3 5BA","category":"Bakery"},
   "flatbread turkish bakery house haymarket terrace edinburgh": {"photo":"images/food/flatbread-turkish-bakery-house-haymarket-terrace-e.jpg","address":"48 Haymarket Terrace, Edinburgh EH12 5LA","category":"Restaurant"},
   "laila cockburn street edinburgh": {"photo":"images/food/laila-cockburn-street-edinburgh.jpg","about":"Mediterranean classics are served for brunch & lunch in this cosy cafe with cheery decor.","address":"63 Cockburn St, Edinburgh EH1 1BS","closed":"permanently closed"},
@@ -500,6 +571,105 @@ const FOOD_INFO = {
   "wingstop edinburgh": {"photo":"images/food/wingstop-edinburgh.jpg","about":"Casual counter-serve chain serving a variety of chicken wings & sides.","address":"Level 1, St James Centre, C1.31, Leith Street Eats, Edinburgh EH1 3SR","category":"Chicken wings restaurant"},
   "edinburgh street food omni centre leith street edinburgh": {"photo":"images/food/edinburgh-street-food-omni-centre-leith-street-edi.jpg","address":"Leith St, Edinburgh EH1 3AU","category":"Food court"},
   "heavenly desserts 134 dundee street edinburgh": {"photo":"images/food/heavenly-desserts-134-dundee-street-edinburgh.jpg","about":"Upmarket dessert cafe serving creative waffles, chocolate fondue & ice-cream sundaes.","address":"130 Dundee St, Edinburgh EH11 1AF","category":"Dessert restaurant"}
+};
+
+/* Map pins for the Google Maps export, keyed by each place's search text (lower case).
+   Places with no pin here are left out of the export. [latitude, longitude] */
+const COORDS = {
+  "flatbread turkish bakery house haymarket terrace edinburgh": [55.94603, -3.22094],
+  "laila cockburn street edinburgh": [55.95068, -3.18884],
+  "dishoom edinburgh st andrew square": [55.95357, -3.19252],
+  "zaza's coffee house grassmarket edinburgh": [55.94690, -3.19735],
+  "deep sea fish and chips 2 antigua street edinburgh": [55.95774, -3.18528],
+  "nanyang malaysian restaurant lister square edinburgh": [55.94360, -3.19376],
+  "flatbread turkish bakery house 48 haymarket terrace edinburgh": [55.94603, -3.22094],
+  "rodi 121 morrison street edinburgh": [55.94594, -3.21103],
+  "tuk tuk indian street food 1 leven street edinburgh": [55.94183, -3.20359],
+  "kezban mediterranean restaurant commercial street edinburgh": [55.97649, -3.17124],
+  "ada restaurant 9a antigua street edinburgh": [55.95801, -3.18515],
+  "edinburgh prime steakhouse": [55.93169, -3.23751],
+  "ronaq comley bank edinburgh": [55.95821, -3.22684],
+  "bonoful portobello edinburgh": [55.95250, -3.11461],
+  "knights kitchen 166 leith walk edinburgh": [55.96777, -3.17452],
+  "chaophraya edinburgh castle street": [55.95226, -3.20291],
+  "solti restaurant 10 drummond street edinburgh": [55.94725, -3.18549],
+  "the dome 14 george street edinburgh": [55.95366, -3.19561],
+  "alandas gelato 1 forrest road edinburgh": [55.94651, -3.19114],
+  "sweet paradice desserts morningside edinburgh": [55.92371, -3.21012],
+  "chulo's stuffed cookies 22 raeburn place edinburgh": [55.95903, -3.21066],
+  "maqbool's supermarket edinburgh": [55.94513, -3.18631],
+  "wisteria & co 213a new city road glasgow": [55.87050, -4.26665],
+  "brooklyn cafe minard road glasgow": [55.83184, -4.27967],
+  "best kabobs dundas street glasgow": [55.86325, -4.25172],
+  "babs kebab glasgow city centre": [55.86184, -4.25522],
+  "doner haus glasgow": [55.86286, -4.25490],
+  "katsu glasgow city centre": [55.86194, -4.25519],
+  "namaste by delhi darbar glasgow": [55.85702, -4.25296],
+  "roya glasgow middle eastern restaurant": [55.86542, -4.26833],
+  "chaakoo bombay cafe glasgow": [55.86127, -4.25587],
+  "madras cafe glasgow": [55.85520, -4.25026],
+  "icafe 250 woodlands road glasgow": [55.87144, -4.27709],
+  "deesserts sauchiehall street glasgow": [55.86538, -4.26406],
+  "heavenly desserts glasgow fort": [55.87332, -4.13390],
+  "chulo's cookies glasgow": [55.86318, -4.27898],
+  "kebab mahal 7 nicolson square edinburgh": [55.94615, -3.18598],
+  "bread meats bread edinburgh": [55.94639, -3.20598],
+  "wingstop edinburgh": [55.95459, -3.18803],
+  "edinburgh street food omni centre leith street edinburgh": [55.95587, -3.18608],
+  "heavenly desserts 134 dundee street edinburgh": [55.94164, -3.21693],
+  "lannan bakery hamilton place edinburgh": [55.95979, -3.20674],
+  "alpine coaster edinburgh": [55.88789, -3.20900],
+  "royal mile edinburgh": [55.95011, -3.18802],
+  "princes street gardens edinburgh": [55.95098, -3.19855],
+  "cockburn street edinburgh": [55.95060, -3.18984],
+  "kelvingrove art gallery and museum glasgow": [55.86859, -4.29060],
+  "riverside museum glasgow": [55.86510, -4.30621],
+  "buchanan street glasgow": [55.86116, -4.25386],
+  "blackford hill edinburgh": [55.92302, -3.19504],
+  "edinburgh castle": [55.94859, -3.19991],
+  "st giles' cathedral edinburgh": [55.94948, -3.19089],
+  "camera obscura and world of illusions edinburgh": [55.94895, -3.19567],
+  "the real mary king's close edinburgh": [55.94992, -3.19051],
+  "grassmarket edinburgh": [55.94736, -3.19608],
+  "victoria street edinburgh": [55.94873, -3.19320],
+  "the vennel edinburgh": [55.94633, -3.19714],
+  "greyfriars kirkyard edinburgh": [55.94667, -3.19213],
+  "palace of holyroodhouse edinburgh": [55.95271, -3.17227],
+  "arthur's seat edinburgh": [55.94408, -3.16183],
+  "canongate edinburgh": [55.95150, -3.17938],
+  "calton hill edinburgh": [55.95505, -3.18274],
+  "national museum of scotland edinburgh": [55.94700, -3.19057],
+  "royal botanic garden edinburgh": [55.96501, -3.20910],
+  "dynamic earth edinburgh": [55.95070, -3.17460],
+  "the meadows edinburgh": [55.94130, -3.19187],
+  "st andrews fife": [56.33978, -2.79672],
+  "stirling castle": [56.12291, -3.94556],
+  "royal yacht britannia leith edinburgh": [55.98216, -3.17725],
+  "portobello beach edinburgh": [55.95508, -3.11069],
+  "cramond beach edinburgh": [55.98018, -3.29821],
+  "princes street edinburgh": [55.95173, -3.19797],
+  "dean village edinburgh": [55.95290, -3.21420],
+  "scott monument edinburgh": [55.95238, -3.19327],
+  "st cuthbert's kirkyard edinburgh": [55.94925, -3.20606],
+  "stockbridge edinburgh": [55.95978, -3.20648],
+  "circus lane edinburgh": [55.95811, -3.20508],
+  "surgeons' hall museum edinburgh": [55.94665, -3.18528],
+  "edinburgh central mosque": [55.94497, -3.18593],
+  "st abbs head": [55.91637, -2.14113],
+  "midhope castle": [55.99210, -3.48766],
+  "urban angel cafe 121 hanover street edinburgh": [55.95478, -3.19768],
+  "bertie's proper fish & chips 9 victoria street edinburgh": [55.94859, -3.19366],
+  "the witchery castlehill edinburgh": [55.94879, -3.19563],
+  "tipo 110 hanover street edinburgh": [55.95453, -3.19808],
+  "patina bar and restaurant edinburgh park": [55.93025, -3.31510],
+  "the palmerston 1 palmerston place edinburgh": [55.94730, -3.21516],
+  "uplands roast edinburgh": [55.94254, -3.19004],
+  "l'etoile salon de tea 44 west port edinburgh": [55.94643, -3.19919],
+  "topping & company booksellers 2 blenheim place edinburgh": [55.95771, -3.18426],
+  "moo pie gelato 26 st mary's street edinburgh": [55.95005, -3.18363],
+  "ciccetta's 26 bruntsfield avenue edinburgh": [55.93712, -3.20995],
+  "sugar daddy's bakery roseneath street edinburgh": [55.93824, -3.19233],
+  "the willow tea rooms 97 buchanan street glasgow": [55.86003, -4.25445]
 };
 
 /* ================================================================== */
@@ -589,6 +759,73 @@ function foodSection(id, title, note, items, extra){
   </section>`;
 }
 
+/* ---------- Google Maps export ----------
+   Google Maps saved lists cannot be imported, so this builds a file for My Maps instead.
+   Every place or venue with a pin in COORDS is included, grouped by day or meal. */
+function exportStops(){
+  const stops = [], skipped = [], seen = new Set();
+  const add = (group, name, key, desc) => {
+    key = key.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    const c = COORDS[key];
+    if (!c) { skipped.push(name); return; }
+    stops.push({group, name, desc, lat:c[0], lng:c[1], url:mapsUrl(name + " " + (key.includes("glasgow") ? "Glasgow" : "Edinburgh"))});
+  };
+  DAYS.forEach(d => d.places.forEach(p => add(d.chip + " " + d.title, p.name, p.q, [p.text, p.tip].filter(Boolean).join(" "))));
+  [["Edinburgh", FOOD], ["Glasgow", GLASGOW]].forEach(([city, F]) => {
+    const item = (label, f) => add(city + " " + label, f.name, f.q || f.name + " " + city,
+      [f.where, f.status, f.note].filter(Boolean).join(". "));
+    [["breakfast","Breakfast"],["lunch","Lunch"],["dinner","Dinner"]].forEach(([k, label]) => F[k].forEach(f => item(label, f)));
+    Object.values(F.snacks).forEach(list => list.forEach(f => item("Snacks", f)));
+  });
+  return {stops, skipped};
+}
+const csvCell = v => '"' + String(v).replace(/"/g, '""') + '"';
+function saveFile(name, type, text){
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], {type}));
+  a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function downloadCsv(){
+  const {stops} = exportStops();
+  const rows = [["Name","Description","Latitude","Longitude","Group","Link"]]
+    .concat(stops.map(s => [s.name, s.desc, s.lat, s.lng, s.group, s.url]));
+  saveFile("edinburgh-trip-places.csv", "text/csv;charset=utf-8", "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n"));
+}
+function downloadKml(){
+  const {stops} = exportStops();
+  const x = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+  const marks = stops.map(s => `  <Placemark><name>${x(s.name)}</name><description>${x(s.desc + " " + s.url)}</description>
+    <ExtendedData><Data name="Group"><value>${x(s.group)}</value></Data></ExtendedData>
+    <Point><coordinates>${s.lng},${s.lat},0</coordinates></Point></Placemark>`).join("\n");
+  saveFile("edinburgh-trip-places.kml", "application/vnd.google-earth.kml+xml",
+    `<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Edinburgh trip</name>\n${marks}\n</Document></kml>`);
+}
+
+function mapsSection(){
+  const {stops, skipped} = exportStops();
+  return `<section class="day" id="maps">
+    <h2>Take these places to Google Maps</h2>
+    <p class="note">Google Maps lists can't be imported directly, so this makes a My Maps map instead. It shows in the Google Maps app under Saved, then Maps.</p>
+    <article class="card"><div class="body">
+      <p>${stops.length} places with pins, grouped by day and meal.${skipped.length ? " " + skipped.length + " have no pin yet and are left out." : ""}</p>
+      <ol class="steps">
+        <li>Download the file below.</li>
+        <li>Open <a href="https://mymaps.google.com" target="_blank" rel="noopener">mymaps.google.com</a> and tap Create a new map.</li>
+        <li>Tap Import and choose the file. For the CSV, pick Latitude and Longitude for the pins, then Name for the titles.</li>
+        <li>Optional: tap Uniform style, then Group, to colour the pins by day or meal.</li>
+      </ol>
+      <div class="actions">
+        <button class="btn" id="dl-csv" type="button">Download CSV (recommended)</button>
+        <button class="btn alt" id="dl-kml" type="button">Download KML</button>
+      </div>
+    </div></article>
+  </section>`;
+}
+
 function build(){
   const nav = $("#nav"), main = $("#main");
   let html = "", chips = "";
@@ -631,8 +868,12 @@ function build(){
       group("Cakes and bakes", S.cakes) + group("Sweets and candy", S.sweets));
   });
 
+  chips += `<li class="gap"><a href="#maps">Google Maps</a></li>`;
+  html += mapsSection();
   nav.innerHTML = chips;
   main.insertAdjacentHTML("beforeend", html);
+  $("#dl-csv").onclick = downloadCsv;
+  $("#dl-kml").onclick = downloadKml;
   highlightNav();
   watchPhotos();
 }
