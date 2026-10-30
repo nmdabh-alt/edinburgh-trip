@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2a2440">
-<title>Edinburgh, 10 to 18 December 2026</title>
+<title>Edinburgh Trip</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
@@ -762,8 +762,11 @@ function foodSection(id, title, note, items, extra){
 /* ---------- Google Maps export ----------
    Google Maps saved lists cannot be imported, so this builds a file for My Maps instead.
    Every place or venue with a pin in COORDS is included, grouped by day or meal. */
-const DAY_COLOURS = ["#1e66f5","#2e9e44","#8e3fc7","#d6336c","#0f9d9a","#8a5a2b","#e6c200","#4c5bd4","#e03131"];
-const FOOD_COLOUR = "#f08c00";
+/* My Maps ignores KML icon tints, so each pin points at an icon that is already coloured:
+   Google's paddle set for days (8 colours for 8 days), and our own dark fork-and-knife pin for all food. */
+const DAY_COLOURS = ["blu","red","grn","ylw","purple","pink","ltblu","orange"]
+  .map(n => `http://maps.google.com/mapfiles/kml/paddle/${n}-blank.png`);
+const FOOD_COLOUR = "https://nmdabh-alt.github.io/edinburgh-trip/images/pins/food.png";
 function exportStops(){
   const stops = [], skipped = [], seen = new Set();
   const add = (group, name, key, desc, colour, cat) => {
@@ -786,7 +789,10 @@ function exportStops(){
   });
   return {stops, skipped};
 }
-const csvCell = v => '"' + String(v).replace(/"/g, '""') + '"';
+const csvCell = v => {
+  v = String(v).replace(/\s*[\r\n]+\s*/g, " ");
+  return /[",]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+};
 function saveFile(name, type, text){
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([text], {type}));
@@ -796,20 +802,19 @@ function saveFile(name, type, text){
 }
 function downloadCsv(){
   const {stops} = exportStops();
-  const rows = [["Name","Description","Latitude","Longitude","Colour by","Group","Link"]]
+  const rows = [["Name","Description","Latitude","Longitude","Category","Group","Link"]]
     .concat(stops.map(s => [s.name, s.desc, s.lat, s.lng, s.cat, s.group, s.url]));
-  saveFile("edinburgh-trip-places.csv", "text/csv;charset=utf-8", "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n"));
+  saveFile("edinburgh-trip-places.csv", "text/csv;charset=utf-8", rows.map(r => r.map(csvCell).join(",")).join("\n") + "\n");
 }
 function downloadKml(){
   const {stops} = exportStops();
   const x = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
   const cats = [...new Set(stops.map(s => s.cat))], colourOf = c => stops.find(s => s.cat === c).colour;
-  const kmlColour = h => "ff" + h.slice(5, 7) + h.slice(3, 5) + h.slice(1, 3);   // #rrggbb -> aabbggrr
-  const styles = cats.map((c, i) => `  <Style id="s${i}"><IconStyle><color>${kmlColour(colourOf(c))}</color><scale>1.1</scale>
-    <Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>`).join("\n");
+  const styles = cats.map((c, i) => `  <Style id="s${i}"><IconStyle><scale>1.1</scale>
+    <Icon><href>${x(colourOf(c))}</href></Icon></IconStyle></Style>`).join("\n");
   const marks = stops.map(s => `  <Placemark><name>${x(s.name)}</name><description>${x(s.desc + " " + s.url)}</description>
     <styleUrl>#s${cats.indexOf(s.cat)}</styleUrl>
-    <ExtendedData><Data name="Colour by"><value>${x(s.cat)}</value></Data><Data name="Group"><value>${x(s.group)}</value></Data></ExtendedData>
+    <ExtendedData><Data name="Category"><value>${x(s.cat)}</value></Data><Data name="Group"><value>${x(s.group)}</value></Data></ExtendedData>
     <Point><coordinates>${s.lng},${s.lat},0</coordinates></Point></Placemark>`).join("\n");
   saveFile("edinburgh-trip-places.kml", "application/vnd.google-earth.kml+xml",
     `<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>Edinburgh trip</name>\n${styles}\n${marks}\n</Document></kml>`);
@@ -826,7 +831,7 @@ function mapsSection(){
         <li>Download the file below.</li>
         <li>Open <a href="https://mymaps.google.com" target="_blank" rel="noopener">mymaps.google.com</a> and tap Create a new map.</li>
         <li>Tap Import and choose the file. For the CSV only, pick Latitude and Longitude for the pins, then Name for the titles.</li>
-        <li>The KML arrives already coloured: one colour per day, and all food in orange. For the CSV, tap Uniform style, then choose "Colour by" to get the same split (My Maps picks the exact colours, and you can change them).</li>
+        <li>The KML arrives already coloured: one colour per day, and all food as dark fork-and-knife pins. For the CSV, tap Uniform style, then choose "Category" to get the same split (My Maps picks the exact colours, and you can change them).</li>
       </ol>
       <div class="actions">
         <button class="btn" id="dl-kml" type="button">Download KML (coloured pins)</button>
