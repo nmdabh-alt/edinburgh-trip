@@ -11,7 +11,7 @@
 <style>
 :root{
   --bg:#eef0f4; --surface:#ffffff; --ink:#1b2230; --muted:#586272; --line:#d6dbe4;
-  --accent:#5b3a73; --accent-ink:#ffffff; --amber:#935606; --chip:#e1e5ec;
+  --accent:#5b3a73; --accent-ink:#ffffff; --amber:#935606; --chip:#e1e5ec; --bad:#b3261e;
   --dusk1:#2a2440; --dusk2:#5b3a73; --dusk3:#d98f4e;
   --serif:"Young Serif", Georgia, "Times New Roman", serif;
   --sans:"Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -19,7 +19,7 @@
 @media (prefers-color-scheme: dark){
   :root{
     --bg:#12161e; --surface:#1b212c; --ink:#e9edf3; --muted:#a2adbc; --line:#2d3646;
-    --accent:#cfa9e3; --accent-ink:#1a1022; --amber:#e3a95d; --chip:#252d3b;
+    --accent:#cfa9e3; --accent-ink:#1a1022; --amber:#e3a95d; --chip:#252d3b; --bad:#ff8a80;
   }
 }
 *{box-sizing:border-box}
@@ -69,6 +69,7 @@ section.day{padding:34px 0 6px}
 .tip{color:var(--muted); font-size:.95rem}
 .badge{display:inline-block; font-size:.82rem; font-weight:600; padding:3px 10px; border-radius:999px; border:1px solid var(--amber); color:var(--amber); margin:0 0 10px}
 .actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.badge.closed{border-color:var(--bad); color:var(--bad); margin-right:6px}
 .btn{display:inline-block; text-decoration:none; font-weight:600; font-size:.95rem; padding:10px 15px; border-radius:10px;
   background:var(--accent); color:var(--accent-ink); min-height:44px}
 .btn.alt{background:transparent; color:var(--ink); border:1px solid var(--line)}
@@ -115,7 +116,10 @@ const DAYS = [
         tip:"Look down the closes on either side. Many open onto small courtyards and stairways." },
       { name:"Princes Street Gardens and Christmas market", wiki:"Princes_Street_Gardens", q:"Princes Street Gardens Edinburgh",
         text:"The sunken park below the castle. In December it typically hosts the Christmas market and funfair, with the castle lit above. A good first-night wander for the boys.",
-        tip:"Market dates and ride prices vary by year. Check the official site before you go." }
+        tip:"Market dates and ride prices vary by year. Check the official site before you go." },
+      { name:"Cockburn Street", wiki:"Cockburn_Street", q:"Cockburn Street Edinburgh",
+        text:"A curving, steep street linking the Royal Mile to Waverley Station, lined with small independent shops, cafes and vintage stores. An easy browse on the first evening.",
+        tip:"Steep and cobbled, so wear good shoes. It runs straight down to Waverley Station." }
     ]},
   { id:"d11", chip:"Fri 11", date:"Friday 11 December", title:"Day trip to Glasgow by bus",
     note:"Roughly 1 to 1.5 hours each way. Mostly indoors, so the weather matters little. Halal food for the day is in the Glasgow food sections below.",
@@ -135,7 +139,10 @@ const DAYS = [
     places:[
       { name:"Alpine Coaster", wiki:"", q:"Alpine Coaster Edinburgh", url:"https://maps.app.goo.gl/q5RHuJV7gtbRu2NW9",
         text:"The mountain coaster you picked, on the southern edge of Edinburgh below the Pentland Hills. You control your own speed on a track that runs down the hillside.",
-        tip:"Book ahead and check the closure policy for wind and ice. Dress warmly and wear grippy shoes." }
+        tip:"Book ahead and check the closure policy for wind and ice. Dress warmly and wear grippy shoes." },
+      { name:"Blackford Hill", wiki:"Blackford_Hill", q:"Blackford Hill Edinburgh",
+        text:"A hill on the south side of the city with a wide view over Edinburgh to Arthur's Seat, and the Royal Observatory on its slopes. A short, free walk if the coaster is closed or you have time after.",
+        tip:"Paths can be muddy or icy in December. Wear grippy shoes." }
     ]},
   { id:"d13", chip:"Sun 13", date:"Sunday 13 December", title:"Old Town highlights",
     note:"Start at the castle when it opens, then work down the Royal Mile.",
@@ -148,7 +155,22 @@ const DAYS = [
         tip:"Check opening times and any visiting guidelines before you go in." },
       { name:"Camera Obscura and World of Illusions", wiki:"Camera_Obscura,_Edinburgh", q:"Camera Obscura and World of Illusions Edinburgh",
         text:"Five floors of optical illusions, mirror mazes and a rooftop view. The camera obscura itself projects live views of the city. Fun for the 14-year-old.",
-        tip:"Pairs well with a rooftop look-out over the Old Town." }
+        tip:"Pairs well with a rooftop look-out over the Old Town." },
+      { name:"The Real Mary King's Close", wiki:"Real_Mary_King's_Close", q:"The Real Mary King's Close Edinburgh",
+        text:"Preserved 17th-century streets and homes hidden beneath the Royal Mile, visited on a guided tour with costumed guides. A good rainy-hour stop for the boys.",
+        tip:"Tours are guided and timed, so book ahead." },
+      { name:"Grassmarket", wiki:"Grassmarket", q:"Grassmarket Edinburgh",
+        text:"A historic market square beneath the castle, now full of pubs, cafes and independent shops. Good for a late-afternoon wander as the lights come on.",
+        tip:"Zaza's Coffee House is here for a warm drink." },
+      { name:"Victoria Street", wiki:"", q:"Victoria Street Edinburgh",
+        text:"A curved, colourful terraced street dropping from the Royal Mile to the Grassmarket, with quirky shops at street level and a walkway above. Often linked to the look of Diagon Alley.",
+        tip:"Short but photogenic. Walk down it on the way to the Grassmarket." },
+      { name:"The Vennel", wiki:"Vennel", q:"The Vennel Edinburgh",
+        text:"A steep set of steps and a lane off the Grassmarket with one of the best views of the castle, plus a surviving section of the old Flodden Wall.",
+        tip:"The steps can be slippery when wet or icy." },
+      { name:"Greyfriars Kirkyard", wiki:"Greyfriars_Kirkyard", q:"Greyfriars Kirkyard Edinburgh",
+        text:"A historic churchyard with old gravestones and views of the castle. Greyfriars Bobby's statue stands near the entrance on Candlemaker Row.",
+        tip:"Check access and opening hours before you go in." }
     ]},
   { id:"d14", chip:"Mon 14", date:"Monday 14 December", title:"Holyrood and Arthur's Seat",
     note:"Sunset is around 3:30 pm, so do the climb early and the palace after.",
@@ -156,9 +178,15 @@ const DAYS = [
       { name:"Palace of Holyroodhouse", wiki:"Palace_of_Holyroodhouse", q:"Palace of Holyroodhouse Edinburgh",
         text:"The King's official residence in Scotland, at the foot of the Royal Mile. Visit the state apartments, Mary Queen of Scots' rooms and the ruined abbey.",
         tip:"Closed during royal use. Confirm dates before planning around it." },
-      { name:"Arthur's Seat", wiki:"Arthur's_Seat", q:"Arthur's Seat Edinburgh",
-        text:"An ancient volcano in Holyrood Park with a view across the whole city. The main path is steady rather than technical, but it can be windy and slippery.",
-        tip:"Wear grippy shoes and bring layers. Skip it in strong wind or ice." }
+      { name:"Arthur's Seat and Salisbury Crags", wiki:"Arthur's_Seat", q:"Arthur's Seat Edinburgh",
+        text:"An ancient volcano in Holyrood Park with a view across the whole city, beside the rocky cliffs of Salisbury Crags. The main path is steady rather than technical, but it can be windy and slippery.",
+        tip:"Wear grippy shoes and bring layers. Skip it in strong wind or ice." },
+      { name:"Canongate", wiki:"Canongate", q:"Canongate Edinburgh",
+        text:"The lower stretch of the Royal Mile, running down to Holyrood. Quieter than the upper Mile, with Canongate Kirk and a mix of old buildings, near the Scottish Parliament.",
+        tip:"A gentle walk to or from the palace." },
+      { name:"Calton Hill", wiki:"Calton_Hill", q:"Calton Hill Edinburgh",
+        text:"A small hill near Princes Street with a skyline view and landmarks including the National Monument and Nelson Monument. A short climb and a good sunset spot.",
+        tip:"Sunset is early in December. Go before it gets dark, and watch the steps for ice." }
     ]},
   { id:"d15", chip:"Tue 15", date:"Tuesday 15 December", title:"Museums and science",
     note:"A good indoor day. Choose the garden or Dynamic Earth depending on the weather.",
@@ -171,17 +199,29 @@ const DAYS = [
         tip:"Check whether the evening light trail is running this year." },
       { name:"Dynamic Earth", wiki:"Dynamic_Earth_(Edinburgh)", q:"Dynamic Earth Edinburgh",
         text:"A science centre about the planet's history, from volcanoes to ice ages. It sits next to Holyrood and suits both sons.",
-        tip:"Good wet-weather alternative to the garden." }
+        tip:"Good wet-weather alternative to the garden." },
+      { name:"The Meadows", wiki:"The_Meadows,_Edinburgh", q:"The Meadows Edinburgh",
+        text:"A large public park just south of the Old Town, close to the National Museum. Tree-lined paths for an easy walk between stops.",
+        tip:"A good stretch of the legs after the museum." }
     ]},
   { id:"d16", chip:"Wed 16", date:"Wednesday 16 December", title:"Day trip: pick one",
-    note:"Decide between a coastal town and a castle city. Both take roughly 1.5 to 2 hours each way.",
+    note:"Decide between a coastal town and a castle city, each roughly 1.5 to 2 hours away each way. Or stay local with a coast day: the Royal Yacht Britannia, Portobello or Cramond.",
     places:[
       { name:"St Andrews", wiki:"St_Andrews", q:"St Andrews Fife",
         text:"A coastal university town with a ruined cathedral, castle, a long beach and the Old Course. Pleasant for walking even in cold weather.",
         tip:"Short daylight means leaving early." },
       { name:"Stirling Castle", wiki:"Stirling_Castle", q:"Stirling Castle",
         text:"A hilltop castle with restored royal apartments and sweeping views, close to the Wallace Monument and Bannockburn. Easier by train than St Andrews.",
-        tip:"Good if you want more history and less walking." }
+        tip:"Good if you want more history and less walking." },
+      { name:"The Royal Yacht Britannia", wiki:"Royal_Yacht_Britannia", q:"Royal Yacht Britannia Leith Edinburgh",
+        text:"The former royal yacht, now moored in Leith and open to visit. See the state rooms, the crew quarters and the engine room.",
+        tip:"Book ahead and check opening days in December." },
+      { name:"Portobello Beach", wiki:"Portobello,_Edinburgh", q:"Portobello Beach Edinburgh",
+        text:"A long sandy beach and promenade on the Firth of Forth, a short bus ride from the centre. Bonoful is nearby if you want dinner after.",
+        tip:"Wrap up warmly. It is exposed and breezy in winter." },
+      { name:"Cramond Beach and Cramond Island", wiki:"Cramond_Island", q:"Cramond Beach Edinburgh",
+        text:"A small village on the Firth of Forth with a beach and a tidal causeway out to Cramond Island. A bracing coastal walk.",
+        tip:"The causeway floods at high tide. Check tide times before crossing and do not go out if unsure." }
     ]},
   { id:"d17", chip:"Thu 17", date:"Thursday 17 December", title:"Shopping and farewell dinner",
     note:"A relaxed last full day. Plan the farewell dinner from the Dinner section.",
@@ -191,7 +231,19 @@ const DAYS = [
         tip:"Stores can be busy near Christmas. Go in the morning." },
       { name:"Dean Village", wiki:"Dean_Village", q:"Dean Village Edinburgh",
         text:"A quiet old milling hamlet on the Water of Leith, a few minutes from the city centre. Stone buildings and a riverside walk, good for photos.",
-        tip:"Combine it with the walk along the Water of Leith." }
+        tip:"Combine it with the walk along the Water of Leith." },
+      { name:"Scott Monument", wiki:"Scott_Monument", q:"Scott Monument Edinburgh",
+        text:"The tall Gothic monument to Sir Walter Scott on Princes Street. You can climb the narrow stairs to a viewing platform over the city.",
+        tip:"The stairs are tight and steep. Check opening times and any age limits." },
+      { name:"St Cuthbert's Kirkyard", wiki:"St_Cuthbert's_Church,_Edinburgh", q:"St Cuthbert's Kirkyard Edinburgh",
+        text:"The church and kirkyard at the west end of Princes Street Gardens, sitting below the castle. A quiet pause between shops.",
+        tip:"Check access before you go in." },
+      { name:"Stockbridge", wiki:"Stockbridge,_Edinburgh", q:"Stockbridge Edinburgh",
+        text:"A village-like neighbourhood north of the New Town with independent shops, cafes and the Water of Leith. Lannan Bakery is on Hamilton Place nearby.",
+        tip:"A short walk from Dean Village." },
+      { name:"Circus Lane", wiki:"", q:"Circus Lane Edinburgh",
+        text:"A cobbled mews lane in the New Town, known for its pretty doorways and a view along the street. A quick photo stop on the way to or from Stockbridge.",
+        tip:"Short and quiet. Pair it with Dean Village." }
     ]},
   { id:"d18", chip:"Fri 18", date:"Friday 18 December", title:"Departure",
     note:"Pack, check out and travel home.", places:[] }
@@ -321,6 +373,9 @@ const FOOD = {
       { name:"Flatbread Turkish Bakery House", where:"Haymarket Terrace", status:"Fully halal",
         note:"Baklava, borek and sweet pastries made in-house. Baklava with coffee and clotted cream is on their menu.",
         q:"Flatbread Turkish Bakery House Haymarket Terrace Edinburgh", src:"https://edinburgh.org/point-of-interest/flatbread-turkish-bakery-house" },
+      { name:"Lannan Bakery & Pantry", where:"29-35 Hamilton Place, Stockbridge", status:"Check with venue",
+        note:"Bakery in Stockbridge, near Circus Lane and Dean Village. No halal information found, so ask about ingredients such as gelatine and lard before ordering.",
+        q:"Lannan Bakery Hamilton Place Edinburgh", src:"http://www.lannanbakery.com/" },
       { name:"Heavenly Desserts (cakes)", where:"134 Dundee Street, Fountain Park", status:"Halal options",
         note:"Cheesecakes and signature desserts alongside the waffles. Confirm halal status for each item.",
         q:"Heavenly Desserts 134 Dundee Street Edinburgh", src:"https://www.ubereats.com/gb/store/heavenly-desserts-fountain-park/ZaZW3jTtVZO4SgN0knOzNA/b884be0e-1cf1-529a-8578-8023165d78bf/99d5c715-e9f4-55ef-83e9-266c97cdaecf" }
@@ -400,6 +455,53 @@ const GLASGOW = {
   }
 };
 
+/* Details from Google Maps, keyed by each venue's search text (lower case).
+   photo = saved copy in images/food, about = Google's one-line summary, closed = Google's closed flag. */
+const FOOD_INFO = {
+  "lannan bakery hamilton place edinburgh": {"photo":"images/food/lannan-bakery-hamilton-place-edinburgh.jpg","address":"29-35 Hamilton Pl, Edinburgh EH3 5BA","category":"Bakery"},
+  "flatbread turkish bakery house haymarket terrace edinburgh": {"photo":"images/food/flatbread-turkish-bakery-house-haymarket-terrace-e.jpg","address":"48 Haymarket Terrace, Edinburgh EH12 5LA","category":"Restaurant"},
+  "laila cockburn street edinburgh": {"photo":"images/food/laila-cockburn-street-edinburgh.jpg","about":"Mediterranean classics are served for brunch & lunch in this cosy cafe with cheery decor.","address":"63 Cockburn St, Edinburgh EH1 1BS","closed":"permanently closed"},
+  "dishoom edinburgh st andrew square": {"photo":"images/food/dishoom-edinburgh-st-andrew-square.jpg","address":"3a St Andrew Sq, Edinburgh EH2 2BD","category":"Indian restaurant"},
+  "zaza's coffee house grassmarket edinburgh": {"photo":"images/food/zaza-s-coffee-house-grassmarket-edinburgh.jpg","address":"21 Grassmarket, Edinburgh EH1 2HS","category":"Coffee shop"},
+  "deep sea fish and chips 2 antigua street edinburgh": {"photo":"images/food/deep-sea-fish-and-chips-2-antigua-street-edinburgh.jpg","address":"2 Antigua St, Edinburgh EH1 3NH","category":"Fish and chips takeaway"},
+  "nanyang malaysian restaurant lister square edinburgh": {"photo":"images/food/nanyang-malaysian-restaurant-lister-square-edinbur.jpg","about":"Modern restaurant and takeaway with smart decor and a classic Malaysian menu, plus dim sum.","address":"Quartermile, 6 - 7 Lister Square, Edinburgh EH3 9GL","category":"Malaysian restaurant"},
+  "flatbread turkish bakery house 48 haymarket terrace edinburgh": {"photo":"images/food/flatbread-turkish-bakery-house-48-haymarket-terrac.jpg","address":"48 Haymarket Terrace, Edinburgh EH12 5LA","category":"Restaurant"},
+  "rodi 121 morrison street edinburgh": {"photo":"images/food/rodi-121-morrison-street-edinburgh.jpg","about":"Relaxed neighbourhood restaurant serving Turkish dishes cooked over charcoal on a barbecue.","address":"121 Morrison St, Edinburgh EH3 8AJ","closed":"permanently closed"},
+  "tuk tuk indian street food 1 leven street edinburgh": {"photo":"images/food/tuk-tuk-indian-street-food-1-leven-street-edinburg.jpg","about":"Colourful, stripped-back restaurant serving small plates of Indian street food, sweets and lassi.","address":"1 Leven St, Edinburgh EH3 9LH","category":"Indian restaurant"},
+  "kezban mediterranean restaurant commercial street edinburgh": {"photo":"images/food/kezban-mediterranean-restaurant-commercial-street-.jpg","about":"Turkish menu with a focus on charcoal grill items in an eclectic space with colorful interiors.","address":"9-10 Commercial St, Leith, Edinburgh EH6 6JA","category":"Mediterranean restaurant"},
+  "ada restaurant 9a antigua street edinburgh": {"photo":"images/food/ada-restaurant-9a-antigua-street-edinburgh.jpg","about":"Traditional Turkish dishes such as bayildi, moussaka and grilled meats served up in simple style.","address":"9a Antigua St, Edinburgh EH1 3NH","category":"Restaurant"},
+  "edinburgh prime steakhouse": {"photo":"images/food/edinburgh-prime-steakhouse.jpg","address":"1-2 Moat Pl, Edinburgh EH14 1NY","category":"Restaurant"},
+  "ronaq comley bank edinburgh": {"photo":"images/food/ronaq-comley-bank-edinburgh.jpg","about":"Spacious venue serving a menu of popular Indian dishes in a stylish dining room.","address":"10-12 Craigleith Rd, Edinburgh EH4 2DP","closed":"permanently closed"},
+  "bonoful portobello edinburgh": {"photo":"images/food/bonoful-portobello-edinburgh.jpg","address":"13-17 Brighton Pl, Portobello, Edinburgh EH15 1LH","category":"Indian restaurant"},
+  "knights kitchen 166 leith walk edinburgh": {"photo":"images/food/knights-kitchen-166-leith-walk-edinburgh.jpg","address":"166 Leith Walk, Edinburgh EH6 5EA","closed":"permanently closed"},
+  "chaophraya edinburgh castle street": {"photo":"images/food/chaophraya-edinburgh-castle-street.jpg","about":"Creative Thai cuisine in a rooftop eatery with sleek modern looks and glass walls for castle views.","address":"4th Floor, 33 Castle St, Edinburgh EH2 3DN","category":"Restaurant"},
+  "solti restaurant 10 drummond street edinburgh": {"photo":"images/food/solti-restaurant-10-drummond-street-edinburgh.jpg","about":"Down-to-earth restaurant serving traditional Nepali cuisine made from locally sourced ingredients.","address":"10 Drummond St, Edinburgh EH8 9TU","category":"Nepalese restaurant"},
+  "the dome 14 george street edinburgh": {"photo":"images/food/the-dome-14-george-street-edinburgh.jpg","about":"Corinthian columns, marble bars and palms in separate rooms for fine dining, light lunches or teas.","address":"14 George St, Edinburgh EH2 2PF","category":"Brunch restaurant"},
+  "alandas gelato 1 forrest road edinburgh": {"photo":"images/food/alandas-gelato-1-forrest-road-edinburgh.jpg","address":"1 Forrest Rd, Edinburgh EH1 2QH","category":"Ice cream shop"},
+  "sweet paradice desserts morningside edinburgh": {"photo":"images/food/sweet-paradice-desserts-morningside-edinburgh.jpg","address":"45 Comiston Rd, Edinburgh EH10 6AB","category":"Dessert shop"},
+  "chulo's stuffed cookies 22 raeburn place edinburgh": {"photo":"images/food/chulo-s-stuffed-cookies-22-raeburn-place-edinburgh.jpg","address":"22 Raeburn Pl, Edinburgh EH4 1HN","category":"Bakery"},
+  "maqbool's supermarket edinburgh": {"photo":"images/food/maqbool-s-supermarket-edinburgh.jpg","address":"36 Potterrow, Edinburgh EH8 9BT","category":"Grocery store"},
+  "wisteria & co 213a new city road glasgow": {"photo":"images/food/wisteria-co-213a-new-city-road-glasgow.jpg","address":"213A New City Rd, Glasgow G4 9PA","category":"Cafe"},
+  "brooklyn cafe minard road glasgow": {"photo":"images/food/brooklyn-cafe-minard-road-glasgow.jpg","address":"21-23 Minard Rd, Shawlands, Glasgow G41 2HR","category":"Cafe"},
+  "best kabobs dundas street glasgow": {"photo":"images/food/best-kabobs-dundas-street-glasgow.jpg","address":"58 Dundas St, Glasgow G1 2AQ","category":"Kebab shop"},
+  "babs kebab glasgow city centre": {"photo":"images/food/babs-kebab-glasgow-city-centre.jpg","about":"Relaxed, warmly-lit Mediterranean restaurant offering kebabs, pita & other street food dishes.","address":"49 W Nile St, Glasgow G1 2PT","category":"Mediterranean restaurant"},
+  "doner haus glasgow": {"photo":"images/food/doner-haus-glasgow.jpg","about":"German kebabs including vegan options, served with beer & cocktails in a hip warehouse setting.","address":"85 W Nile St, Glasgow G1 2SH","closed":"permanently closed"},
+  "katsu glasgow city centre": {"photo":"images/food/katsu-glasgow-city-centre.jpg","address":"53 W Nile St, Glasgow G1 2QB","category":"Japanese curry restaurant"},
+  "namaste by delhi darbar glasgow": {"photo":"images/food/namaste-by-delhi-darbar-glasgow.jpg","address":"St Enoch Centre 1st Floor, next to Vue Cinema, 55 St Enoch Sq, Glasgow G1 4BW","category":"Modern Indian restaurant"},
+  "roya glasgow middle eastern restaurant": {"photo":"images/food/roya-glasgow-middle-eastern-restaurant.jpg","address":"59 Elmbank St, Glasgow G2 4PQ","category":"Middle Eastern restaurant"},
+  "chaakoo bombay cafe glasgow": {"photo":"images/food/chaakoo-bombay-cafe-glasgow.jpg","about":"Curries, kebabs & other Indian & Persian fare in a cosy venue with old-school furnishings.","address":"79 St Vincent St, Glasgow G2 5TF","category":"Indian restaurant"},
+  "madras cafe glasgow": {"photo":"images/food/madras-cafe-glasgow.jpg","about":"Cosy curry house serving classic North & South Indian fare, along with seafood grills & street food.","address":"120 Stockwell St, Glasgow G1 4LW","category":"Indian restaurant"},
+  "icafe 250 woodlands road glasgow": {"photo":"images/food/icafe-250-woodlands-road-glasgow.jpg","about":"Up to date cafe doing a standard range of hot and cold snacks with smoothies and milkshakes.","address":"250-254 Woodlands Rd, Kelvingrove St, Glasgow G3 6ND","category":"Cafe"},
+  "deesserts sauchiehall street glasgow": {"photo":"images/food/deesserts-sauchiehall-street-glasgow.jpg","about":"Colourful dessert shop doling out sweet treats such as ice cream sundaes & waffles with toppings.","address":"287 Sauchiehall St, Glasgow G2 3HQ","category":"Dessert shop"},
+  "heavenly desserts glasgow fort": {"photo":"images/food/heavenly-desserts-glasgow-fort.jpg","about":"Upmarket dessert cafe serving creative waffles, chocolate fondue & ice-cream sundaes.","address":"Unit C, Glasgow Fort Shopping Park, 90 Provan Walk, Glasgow G34 9DL","category":"Dessert restaurant"},
+  "chulo's cookies glasgow": {"photo":"images/food/chulo-s-cookies-glasgow.jpg","address":"936 Argyle St, Finnieston, Glasgow G3 8YJ","category":"Bakery"},
+  "kebab mahal 7 nicolson square edinburgh": {"photo":"images/food/kebab-mahal-7-nicolson-square-edinburgh.jpg","about":"Basic, bustling, budget diner-takeaway with tandoori and shish kebab specialities. No alcohol.","address":"7 Nicolson Square, Edinburgh EH8 9BH","category":"Kebab shop"},
+  "bread meats bread edinburgh": {"photo":"images/food/bread-meats-bread-edinburgh.jpg","address":"90-92 Lothian Rd, Edinburgh EH3 9BE","category":"Hamburger restaurant"},
+  "wingstop edinburgh": {"photo":"images/food/wingstop-edinburgh.jpg","about":"Casual counter-serve chain serving a variety of chicken wings & sides.","address":"Level 1, St James Centre, C1.31, Leith Street Eats, Edinburgh EH1 3SR","category":"Chicken wings restaurant"},
+  "edinburgh street food omni centre leith street edinburgh": {"photo":"images/food/edinburgh-street-food-omni-centre-leith-street-edi.jpg","address":"Leith St, Edinburgh EH1 3AU","category":"Food court"},
+  "heavenly desserts 134 dundee street edinburgh": {"photo":"images/food/heavenly-desserts-134-dundee-street-edinburgh.jpg","about":"Upmarket dessert cafe serving creative waffles, chocolate fondue & ice-cream sundaes.","address":"130 Dundee St, Edinburgh EH11 1AF","category":"Dessert restaurant"}
+};
+
 /* ================================================================== */
 const $ = (s, el=document) => el.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -442,7 +544,7 @@ const SOURCE_NAMES = {
   "list.co.uk":"The List", "visitglasgow.com":"Visit Glasgow", "designmynight.com":"DesignMyNight", "timeout.com":"Time Out",
   "spottedbylocals.com":"Spotted by Locals", "inkl.com":"inkl", "bite-magazine.com":"Bite magazine",
   "trulyexperiencesblog.com":"Truly Experiences blog", "firsttable.co.uk":"First Table", "scotsman.com":"The Scotsman",
-  "deliveroo.co.uk":"Deliveroo"
+  "deliveroo.co.uk":"Deliveroo", "lannanbakery.com":"the bakery's website"
 };
 function halalLine(f){
   if (!f.status) return "";
@@ -455,12 +557,19 @@ function halalLine(f){
 function foodCard(f, city){
   const c = typeof city === "string" ? city : "Edinburgh";
   const base = f.name.replace(/\s*\(.*?\)/g, "");
+  const info = FOOD_INFO[(f.q || f.name + " " + c).toLowerCase()] || {};
+  const photo = info.photo
+    ? `<div class="photos"><figure><img src="${esc(info.photo)}" alt="${esc(f.name)}" loading="lazy" decoding="async"></figure></div><div class="credit">Photo from Google Maps.</div>`
+    : `<div class="photos pending" ${f.wiki ? `data-wiki="${esc(f.wiki)}"` : `data-search="${esc(base + " " + c)}"`} data-name="${esc(f.name)}"></div><div class="credit"></div>`;
   return `<article class="card">
-    <div class="photos pending" ${f.wiki ? `data-wiki="${esc(f.wiki)}"` : `data-search="${esc(base + " " + c)}"`} data-name="${esc(f.name)}"></div><div class="credit"></div>
+    ${photo}
     <div class="body">
     <h3>${esc(f.name)}</h3>
     ${f.where ? `<p class="tip">${esc(f.where)}</p>` : ""}
+    ${info.address && !(f.where || "").toLowerCase().includes(info.address.replace(/^[\d\s\-a-z]{0,4}(?=[A-Za-z]{4})/, "").split(/[ ,]/)[0].toLowerCase()) ? `<p class="tip">${esc(info.address)}</p>` : ""}
+    ${info.closed ? `<span class="badge closed">Google Maps lists this as ${esc(info.closed)}</span>` : ""}
     ${f.status ? `<span class="badge">${esc(f.status)}</span>` : ""}
+    ${info.about ? `<p>${esc(info.about)}</p>` : ""}
     ${f.note ? `<p>${esc(f.note)}</p>` : ""}
     ${halalLine(f)}
     <div class="actions">
@@ -548,13 +657,28 @@ function highlightNav(){
   document.querySelectorAll("section.day").forEach(s => io.observe(s));
 }
 
+/* Wikipedia rate-limits bursts, so load at most two cards' photos at a time. */
+const photoQueue = [];
+let photoActive = 0;
+function queuePhotos(el){
+  photoQueue.push(el);
+  pumpPhotos();
+}
+function pumpPhotos(){
+  while (photoActive < 2 && photoQueue.length){
+    const el = photoQueue.shift();
+    photoActive++;
+    Promise.resolve(loadPhotos(el)).catch(() => {}).finally(() => { photoActive--; pumpPhotos(); });
+  }
+}
+
 /* Photos only start loading as a card nears the screen. */
 function watchPhotos(){
   const io = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if (!en.isIntersecting) return;
       io.unobserve(en.target);
-      loadPhotos(en.target);
+      queuePhotos(en.target);
     });
   }, {rootMargin:"600px 0px"});
   document.querySelectorAll(".photos[data-wiki], .photos[data-search]").forEach(el => io.observe(el));
@@ -564,9 +688,13 @@ function watchPhotos(){
    Loaded live from Wikipedia. Two routes are tried, with a timeout, and a
    short reason is shown on the card if both fail. */
 async function getJSON(url, ms){
-  const c = new AbortController(), t = setTimeout(() => c.abort(), ms || 9000);
+  const c = new AbortController(), t = setTimeout(() => c.abort(), ms || 15000);
   try {
-    const r = await fetch(url, {signal:c.signal});
+    let r = await fetch(url, {signal:c.signal});
+    for (let wait = 1500; r.status === 429 && wait <= 6000; wait *= 2){   // rate-limited: back off and retry
+      await new Promise(res => setTimeout(res, wait));
+      r = await fetch(url, {signal:c.signal});
+    }
     if (!r.ok) throw new Error("HTTP " + r.status);
     return await r.json();
   } finally { clearTimeout(t); }
