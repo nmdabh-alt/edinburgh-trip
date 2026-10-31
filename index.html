@@ -802,11 +802,10 @@ function foodSection(id, title, note, items, extra){
 /* ---------- Google Maps export ----------
    Google Maps saved lists cannot be imported, so this builds a file for My Maps instead.
    Every place or venue with a pin in COORDS is included, grouped by day or meal. */
-/* My Maps ignores KML icon tints, so each pin points at an icon that is already coloured:
-   Google's paddle set for days (8 colours for 8 days), and our own dark fork-and-knife pin for all food. */
-const DAY_COLOURS = ["blu","red","grn","ylw","purple","pink","ltblu","orange"]
-  .map(n => `http://maps.google.com/mapfiles/kml/paddle/${n}-blank.png`);
-const FOOD_COLOUR = "https://nmdabh-alt.github.io/edinburgh-trip/images/pins/food.png";
+/* One colour per day, and one more for every food, snack and sweets place. The KML uses the same
+   white pin icon and style layout that My Maps itself exports, because that is the form it tints. */
+const DAY_COLOURS = ["#0288D1","#0F9D58","#DB4437","#F4B400","#9C27B0","#795548","#00ACC1","#F06292"];
+const FOOD_COLOUR = "#E65100";
 function exportStops(){
   const stops = [], skipped = [], seen = new Set();
   const add = (group, name, key, desc, colour, cat) => {
@@ -850,8 +849,15 @@ function downloadKml(){
   const {stops} = exportStops();
   const x = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
   const cats = [...new Set(stops.map(s => s.cat))], colourOf = c => stops.find(s => s.cat === c).colour;
-  const styles = cats.map((c, i) => `  <Style id="s${i}"><IconStyle><scale>1.1</scale>
-    <Icon><href>${x(colourOf(c))}</href></Icon></IconStyle></Style>`).join("\n");
+  const kmlColour = h => "ff" + h.slice(5, 7) + h.slice(3, 5) + h.slice(1, 3);   // #rrggbb -> aabbggrr
+  const pin = (id, col) => `  <Style id="${id}"><IconStyle><color>${col}</color><scale>1</scale>
+    <Icon><href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href></Icon>
+    <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/></IconStyle></Style>`;
+  const styles = cats.map((c, i) => {
+    const col = kmlColour(colourOf(c));
+    return pin(`s${i}-n`, col) + "\n" + pin(`s${i}-h`, col) +
+      `\n  <StyleMap id="s${i}"><Pair><key>normal</key><styleUrl>#s${i}-n</styleUrl></Pair><Pair><key>highlight</key><styleUrl>#s${i}-h</styleUrl></Pair></StyleMap>`;
+  }).join("\n");
   const marks = stops.map(s => `  <Placemark><name>${x(s.name)}</name><description>${x(s.desc + " " + s.url)}</description>
     <styleUrl>#s${cats.indexOf(s.cat)}</styleUrl>
     <ExtendedData><Data name="Category"><value>${x(s.cat)}</value></Data><Data name="Group"><value>${x(s.group)}</value></Data></ExtendedData>
@@ -871,7 +877,7 @@ function mapsSection(){
         <li>Download the file below.</li>
         <li>Open <a href="https://mymaps.google.com" target="_blank" rel="noopener">mymaps.google.com</a> and tap Create a new map.</li>
         <li>Tap Import and choose the file. For the CSV only, pick Latitude and Longitude for the pins, then Name for the titles.</li>
-        <li>The KML arrives already coloured: one colour per day, and all food as dark fork-and-knife pins. For the CSV, tap Uniform style, then choose "Category" to get the same split (My Maps picks the exact colours, and you can change them).</li>
+        <li>The KML arrives already coloured: one colour per day, and one separate colour for every food, snack and sweets place. For the CSV, tap Uniform style, then choose "Category" to get the same split (My Maps picks the exact colours, and you can change them).</li>
       </ol>
       <div class="actions">
         <button class="btn" id="dl-kml" type="button">Download KML (coloured pins)</button>
