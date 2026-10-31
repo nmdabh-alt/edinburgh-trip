@@ -853,13 +853,15 @@ function downloadKml(){
   const pin = (id, col) => `  <Style id="${id}"><IconStyle><color>${col}</color><scale>1</scale>
     <Icon><href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href></Icon>
     <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/></IconStyle></Style>`;
-  const styles = cats.map((c, i) => {
-    const col = kmlColour(colourOf(c));
-    return pin(`s${i}-n`, col) + "\n" + pin(`s${i}-h`, col) +
-      `\n  <StyleMap id="s${i}"><Pair><key>normal</key><styleUrl>#s${i}-n</styleUrl></Pair><Pair><key>highlight</key><styleUrl>#s${i}-h</styleUrl></Pair></StyleMap>`;
+  /* My Maps reads the colour from ids shaped like icon-1899-RRGGBB-nodesc, as in its own exports. */
+  const sid = c => "icon-1899-" + colourOf(c).slice(1).toUpperCase() + "-nodesc";
+  const styles = cats.map(c => {
+    const col = kmlColour(colourOf(c)), id = sid(c);
+    return pin(id + "-normal", col) + "\n" + pin(id + "-highlight", col) +
+      `\n  <StyleMap id="${id}"><Pair><key>normal</key><styleUrl>#${id}-normal</styleUrl></Pair><Pair><key>highlight</key><styleUrl>#${id}-highlight</styleUrl></Pair></StyleMap>`;
   }).join("\n");
   const marks = stops.map(s => `  <Placemark><name>${x(s.name)}</name><description>${x(s.desc + " " + s.url)}</description>
-    <styleUrl>#s${cats.indexOf(s.cat)}</styleUrl>
+    <styleUrl>#${sid(s.cat)}</styleUrl>
     <ExtendedData><Data name="Category"><value>${x(s.cat)}</value></Data><Data name="Group"><value>${x(s.group)}</value></Data></ExtendedData>
     <Point><coordinates>${s.lng},${s.lat},0</coordinates></Point></Placemark>`).join("\n");
   saveFile("edinburgh-trip-places.kml", "application/vnd.google-earth.kml+xml",
